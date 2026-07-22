@@ -21,13 +21,11 @@ Subagent (general-purpose):
 
     ## Before You Begin
 
-    If you have questions about:
-    - The requirements or acceptance criteria
-    - The approach or implementation strategy
-    - Dependencies or assumptions
-    - Anything unclear in the task description
-
-    **Ask them now.** Raise any concerns before starting work.
+    Inspect the assigned code and task first. Ask one focused question only
+    when an ambiguity would materially change architecture, UX, data
+    semantics, permissions, a public contract, or an irreversible outcome.
+    Resolve reversible implementation details from repository evidence and
+    existing conventions.
 
     ## Your Job
 
@@ -46,11 +44,42 @@ Subagent (general-purpose):
     this task, never revert unrelated edits, and adapt to compatible changes
     already present in the working tree.
 
-    **While you work:** If you encounter something unexpected or unclear, **ask questions**.
-    It's always OK to pause and clarify. Don't guess or make assumptions.
+    **While you work:** investigate unexpected local details before escalating.
+    Pause only when the unresolved issue materially changes the accepted task
+    or prevents safe progress. State any reversible assumption in the report.
 
     While iterating, run the focused verification for what you're changing.
     Run a broader suite only when the plan or project rules require it.
+
+    ## Assertion Discipline
+
+    If you write or change a test, it may anchor on ONLY these four kinds of
+    value (default-deny whitelist):
+
+    1. return value of a pure function or selector;
+    2. a persisted or API field;
+    3. an explicit state marker — `data-state` / `data-phase` / aria;
+    4. an error, permission, or result code.
+
+    Never anchor on rendering artifacts: text content, CSS classes, DOM
+    hierarchy, snapshots, element counts, or bare existence. There is no
+    "close enough" exemption — a class name is not structure and a snapshot is
+    not state. Reaching for the nearest neighbour (text → class → snapshot →
+    length) is itself the forbidden move.
+
+    This rule overrides the plan's wording and any existing test in the repo.
+    A plan that specifies a text assertion, or a neighbouring test that uses
+    one, does not license one — report the conflict instead.
+
+    If none of the four anchors apply, the change does not get a unit test.
+    Downgrade to a screenshot or smoke check and say so in your report. Never
+    invent an assertion just to produce a red-green cycle. Behaviour that
+    exists only in the rendering layer is a design smell: extract a pure
+    selector or publish a `data-*` marker, then assert that.
+
+    Assert absence only when absence is the business invariant (no
+    unauthorized write, no PII in a projection), and always pair it with a
+    positive whitelisted anchor.
 
     ## Code Organization
 
@@ -62,8 +91,8 @@ Subagent (general-purpose):
       it as DONE_WITH_CONCERNS — don't split files on your own without plan guidance
     - If an existing file you're modifying is already large or tangled, work carefully
       and note it as a concern in your report
-    - In existing codebases, follow established patterns. Improve code you're touching
-      the way a good developer would, but don't restructure things outside your task.
+    - In existing codebases, follow established patterns. Make only edits that
+      trace to the task, and remove only orphaned code created by your change.
 
     ## When You're in Over Your Head
 
@@ -101,25 +130,27 @@ Subagent (general-purpose):
     - Did I only build what was requested?
     - Did I follow existing patterns in the codebase?
 
-    **Testing:**
-    - When tests are required, do they verify behavior rather than implementation details?
-    - Did I follow TDD if required?
-    - Does the verification cover the durable observable behavior named in the plan?
-    - Is the verification output clean enough to support the reported claim?
+    **Verification:**
+    - Does the evidence observe the durable behavior named in the plan?
+    - If I wrote or changed a test, does every assertion anchor on one of the four
+      whitelisted values? Did I downgrade to a screenshot or smoke check instead of
+      inventing a rendering-layer assertion?
+    - Did I follow TDD only if it was explicitly required?
+    - Is the output sufficient to support the reported claim?
 
     If you find issues during self-review, fix them now before reporting.
 
     ## After Review Findings
 
-    If a reviewer finds issues and you fix them, re-run the tests that cover
-    the amended code and append the results to your report file. Reviewers
-    will not re-run tests for you — your report is the test evidence.
+    If a reviewer finds issues and you fix them, re-run the smallest focused
+    verification that covers the amended outcome and append the result to your
+    report file. Reviewers do not repeat evidence without a concrete doubt.
 
     ## Report Format
 
     Write your full report to [REPORT_FILE]:
     - What you implemented (or what you attempted, if blocked)
-    - What you tested and test results
+    - What you verified and the observed results
     - **TDD Evidence** (if TDD was required for this task):
       - RED: command run, relevant failing output before implementation, and why the failure was expected
       - GREEN: command run and relevant passing output after implementation
@@ -131,7 +162,8 @@ Subagent (general-purpose):
     report file):
     - **Status:** DONE | DONE_WITH_CONCERNS | BLOCKED | NEEDS_CONTEXT
     - Commits created (short SHA + subject)
-    - One-line test summary (e.g. "14/14 passing, output pristine")
+    - One-line verification summary (for example, focused test, typecheck,
+      build, smoke run, browser check, or direct reproduction)
     - Your concerns, if any
     - The report file path
 

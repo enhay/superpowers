@@ -1,6 +1,6 @@
 ---
 name: writing-plans
-description: Use when a medium or larger task needs a durable implementation plan before code changes, or when the user explicitly asks for a plan. Skip trivial and small tasks that can be completed directly.
+description: Use when a medium or larger task needs a durable implementation plan before code changes, when the user explicitly asks for a plan, or when the user asks to review or critique an existing plan or spec. Skip trivial and small tasks that can be completed directly.
 ---
 
 # Writing Plans
@@ -57,9 +57,9 @@ Save plans to `docs/plans/YYYY-MM-DD-<slug>.md`. User or project instructions ov
 
 **Implementation notes:** Only decisions and constraints that the implementer must not rediscover. Do not paste routine implementation bodies.
 
-**Verification:** The smallest evidence that proves this task works. Testing intensity follows project rules and `right-sizing-tests`; TDD is not automatic.
+**Verification:** The smallest direct evidence that proves this task works. Do not add tests merely because the task changes behavior, fixes a bug, or carries business risk. Use strict TDD only when the user explicitly requests it or a project-local rule independently requires it.
 
-**Commit boundary:** Suggested task-level commit when plan execution includes commits.
+**Commit boundary:** Required when this plan will use `subagent-driven-development`, because task review and recovery depend on isolated task commits. Otherwise include a commit only when the user requested commits or the execution workflow needs one.
 ```
 
 ## Task Boundaries
@@ -84,21 +84,56 @@ Split by deliverable and responsibility, not by technical layer. Follow the exis
 
 Critical algorithms, data semantics, permission rules, or public contracts may include a compact pseudocode fragment or exact invariant when the implementation shape is itself part of the decision.
 
-## Self-Review
+## Reviewing a Plan or Spec
 
-Before handing off the plan:
+Use this before handing off your own plan, and as the checklist when the user
+asks you to review a plan or spec someone else wrote. Read it and respond
+directly — a plan is not a code change, so do not dispatch a reviewer
+subagent.
 
-1. Map every acceptance condition to at least one task.
-2. Check task interfaces and names for consistency.
-3. Remove stale or speculative tasks.
-4. Confirm verification matches risk rather than habit.
-5. Confirm the plan is stored in the repository instead of being dumped into the conversation.
+A plan cannot be proven by running it, and every downstream task inherits its
+mistakes. So review only what is expensive to reverse once built and invisible
+in a later diff:
+
+1. **Premises.** Which load-bearing facts were verified against real data, and
+   which are inference? A plan built on an unverified premise fails whole.
+2. **Falsifiable acceptance.** Can you state the observation that decides
+   success — and what failure would look like, such that the plan could be
+   judged not worth keeping?
+3. **Boundaries and contracts.** Ownership of data, who calls whom, interface
+   shapes, and which contracts break external callers if changed.
+4. **Data semantics.** Denominators, time windows, join keys, and exclusions
+   pinned exactly. Wrong calibration produces wrong numbers that pass every
+   test.
+5. **State and migration.** What happens to existing data, how long old and
+   new coexist, and whether the plan corrects the model or layers compatibility
+   over a bad shape.
+6. **Permissions and PII.** Who can see what, tenant isolation, and which
+   fields reach user-visible output.
+7. **Irreversible points.** Which step cannot be undone — that is where commit
+   boundaries and stronger verification belong, not spread evenly.
+8. **Task independence.** Hidden ordering dependencies or two tasks editing
+   the same file decide the execution route.
+9. **Proportion.** A plan too heavy for its problem is a finding, in both
+   directions.
+10. **Implicit decisions.** Find the business choices the plan quietly made —
+    a threshold, a default, a calibration — without surfacing them for the
+    user.
+
+Also confirm every acceptance condition maps to a task, task interfaces and
+names are consistent, stale or speculative tasks are removed, verification
+matches risk rather than habit, and the plan lives in the repository rather
+than the conversation.
+
+Out of scope: wording and formatting, implementation detail that belongs to
+execution (naming, library choice, function decomposition), and demands that
+the plan enumerate every edge case.
 
 ## Execution Routing
 
 After saving the plan, return only a concise summary, its path, and the execution route:
 
-- Use `subagent-driven-development` when tasks are independently implementable and reviewable in the current session.
-- Use `executing-plans` or direct main-agent execution when tasks are tightly coupled or delegation would add more coordination than value.
+- Use `subagent-driven-development` when tasks are independently implementable and reviewable in the current session and the plan authorizes task-level commits.
+- Use `executing-plans` or direct main-agent execution when tasks lack commit boundaries, are tightly coupled, or delegation would add more coordination than value.
 
 If the user already asked to implement the plan, begin the appropriate execution workflow without asking them to choose again.

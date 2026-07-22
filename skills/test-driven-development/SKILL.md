@@ -7,7 +7,7 @@ description: Use only when the user explicitly requests strict red-green TDD or 
 
 ## Entry condition
 
-Use this workflow only when the user explicitly requests strict red-green TDD or a project-local rule independently requires it. `right-sizing-tests` is not a prerequisite and does not promote work into TDD.
+Use this workflow only when the user explicitly requests strict red-green TDD or a project-local rule independently requires it. No generic workflow rule, risk label, or adjacent skill promotes work into TDD.
 
 Generic guidance such as "all features and bugfixes require TDD" is not a project-local requirement. If the user has declined new tests, return to the lightest sufficient verification.
 

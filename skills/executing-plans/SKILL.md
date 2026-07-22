@@ -5,63 +5,41 @@ description: Use when executing a written implementation plan whose tasks are ti
 
 # Executing Plans
 
-## Overview
+Execute a durable plan on the main line while keeping it aligned with current code facts.
 
-Load plan, review critically, execute all tasks, report when complete.
+Use `subagent-driven-development` instead when tasks are independently implementable and reviewable. Do not delegate merely because workers are available.
 
-**Announce at start:** "I'm using the executing-plans skill to implement this plan."
+## Load and Reconcile
 
-Use `subagent-driven-development` instead when plan tasks are independently implementable and reviewable. Do not prefer delegation merely because workers are available.
+1. Read the plan and any referenced spec.
+2. Inspect the current code and working-tree state relevant to the first task.
+3. Treat the user-owned goal and acceptance criteria as fixed. Treat implementation notes, file lists, task order, and verification commands as revisable when current evidence disproves them.
+4. Ask one consolidated question only when a conflict would materially change architecture, UX, data semantics, permissions, a public contract, or an irreversible outcome.
 
-## The Process
+Do not pause for approval over reversible implementation details that can be resolved from code and project conventions.
 
-### Step 1: Load and Review Plan
-1. Read plan file
-2. Review critically - identify any questions or concerns about the plan
-3. If concerns: Raise them with your human partner before starting
-4. If no concerns: Create todos for the plan items and proceed
-
-### Step 2: Execute Tasks
+## Execute
 
 For each task:
-1. Mark as in_progress
-2. Follow each step exactly (plan has bite-sized steps)
-3. Run verifications as specified
-4. Mark as completed
 
-### Step 3: Complete Development
+1. Mark it in progress.
+2. Implement the task's deliverable and preserve its interfaces and binding constraints.
+3. Run the smallest direct verification that proves the deliverable.
+4. Update the plan with corrected facts, completed work, and remaining tasks; remove stale todo items and obsolete steps.
+5. Mark the task complete only when its acceptance evidence is present.
 
-After all tasks complete and verified, report the plan outcome and remaining branch state. Use `finishing-a-development-branch` only when the user has explicitly asked to finish or integrate the branch.
+Continue through the plan without routine check-ins. Stop only for a material unresolved decision, missing authority, unsafe or irreversible action, overlapping user changes, or a blocker that remains after focused investigation.
 
-## When to Stop and Ask for Help
+## Git and Isolation
 
-**STOP executing immediately when:**
-- Hit a blocker (missing dependency, test fails, instruction unclear)
-- Plan has critical gaps preventing starting
-- You don't understand an instruction
-- Verification fails repeatedly
+- Before the first edit, inspect the working tree. If it holds uncommitted changes you did not make, ask the user how to proceed before editing. Never stash, revert, check out over, or commit them to clear the way.
+- Work in the current checkout unless the user, project rules, or approved plan explicitly requires a standard git worktree.
+- Do not create commits unless the user requested them or the approved plan defines commit boundaries.
+- Never push, merge, clean a worktree, or remove a branch without explicit authorization.
+- Preserve unknown or unrelated changes as user-owned.
 
-**Ask for clarification rather than guessing.**
+## Completion
 
-## When to Revisit Earlier Steps
+After all tasks are complete, reconcile the final implementation against the plan's goal and acceptance criteria, report the verification evidence and remaining repository state, and leave the plan as an accurate recovery document.
 
-**Return to Review (Step 1) when:**
-- Partner updates the plan based on your feedback
-- Fundamental approach needs rethinking
-
-**Don't force through blockers** - stop and ask.
-
-## Remember
-- Review plan critically first
-- Follow plan steps exactly
-- Don't skip verifications
-- Reference skills when plan says to
-- Stop when blocked, don't guess
-- Never start implementation on main/master branch without explicit user consent
-
-## Integration
-
-**Related workflow skills:**
-- **using-git-worktrees** - Use only when the user or plan requires isolation.
-- **writing-plans** - Creates the plan this skill executes.
-- **finishing-a-development-branch** - Use only after an explicit finish or integration request.
+Use `finishing-a-development-branch` only when the user explicitly asks to finish, merge, integrate, create a PR, or clean up the branch.

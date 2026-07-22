@@ -1,103 +1,54 @@
 ---
 name: requesting-code-review
-description: Use when completing tasks, implementing major features, or before merging to verify work meets requirements
+description: Use when dispatching a reviewer at a code change (diff or commit range) because the user explicitly asked for code review, an approved plan defines a review boundary, or subagent-driven development requires task or final review. Not for reviewing a plan, spec, document, or other prose artifact, and not for ordinary task completion.
 ---
 
 # Requesting Code Review
 
-Dispatch a code reviewer subagent to catch issues before they cascade. The reviewer gets precisely crafted context for evaluation — never your session's history. This keeps the reviewer focused on the work product, not your thought process, and preserves your own context for continued work.
+Use an independent, read-only reviewer when review is part of the accepted workflow. Ordinary small changes use direct inspection and proportional verification instead of automatically dispatching another agent.
 
-**Core principle:** Review early, review often.
+## Entry Condition
 
-## When to Request Review
+Request review only when at least one condition is true:
 
-**Mandatory:**
-- After each task in subagent-driven development
-- After completing major feature
-- Before merge to main
+- the user explicitly asks for review;
+- an approved plan names a review boundary;
+- `subagent-driven-development` requires its task-scoped or final review;
+- a requested merge or integration workflow requires an independent readiness check.
 
-**Optional but valuable:**
-- When stuck (fresh perspective)
-- Before refactoring (baseline check)
-- After fixing complex bug
+Do not trigger merely because implementation is complete, a change is called a feature or bugfix, or a reviewer is available.
 
-## How to Request
+The object of review is always a code change — a diff file, commit range, or working-tree diff. A request to review a plan, spec, proposal, design document, report, or any other prose artifact is not a code review, even though it uses the word "review". Read and critique it directly instead; plan quality criteria live in `writing-plans`. Do not dispatch a reviewer subagent when there is no diff to hand it.
 
-**1. Get git SHAs:**
-```bash
-BASE_SHA=$(git rev-parse HEAD~1)  # or origin/main
-HEAD_SHA=$(git rev-parse HEAD)
-```
+## Prepare the Review
 
-**2. Dispatch code reviewer subagent:**
+Provide the reviewer with:
 
-Dispatch a `general-purpose` subagent, filling the template at [code-reviewer.md](code-reviewer.md)
+- the exact requirement, plan task, or acceptance criteria;
+- the change under review as a diff file, commit range, or current working-tree diff;
+- any binding project constraints;
+- the verification evidence already collected.
 
-**Placeholders:**
-- `{DESCRIPTION}` - Brief summary of what you built
-- `{PLAN_OR_REQUIREMENTS}` - What it should do
-- `{BASE_SHA}` - Starting commit
-- `{HEAD_SHA}` - Ending commit
+Do not create a commit solely to manufacture a review range. Do not paste session history or implementation reasoning when the requirements and diff are sufficient.
 
-**3. Act on feedback:**
-- Fix Critical issues immediately
-- Fix Important issues before proceeding
-- Note Minor issues for later
-- Push back if reviewer is wrong (with reasoning)
+## Dispatch
 
-## Example
+Use the read-only template at [code-reviewer.md](code-reviewer.md). Scope the reviewer to the supplied change and named risks. Broaden into unchanged code only when a concrete integration, contract, security, or data risk requires it.
 
-```
-[Just completed Task 2: Add verification function]
+## Act on Findings
 
-You: Let me request code review before proceeding.
+- Verify every finding against the actual code and requirements.
+- Fix Critical findings before accepting the work.
+- Fix Important findings that make the requested outcome incorrect, incomplete, unsafe, or materially unmaintainable.
+- Treat Minor findings as advisory unless the user or plan includes them.
+- Push back with evidence when a finding is incorrect or expands scope.
+- Re-review only the amended area unless the fix changes a broader contract.
 
-BASE_SHA=$(git log --oneline | grep "Task 1" | head -1 | awk '{print $1}')
-HEAD_SHA=$(git rev-parse HEAD)
+Review does not authorize new features, unrelated refactors, extra tests, migrations, compatibility work, documentation, commits, or external actions that were not already in scope.
 
-[Dispatch code reviewer subagent]
-  DESCRIPTION: Added verifyIndex() and repairIndex() with 4 issue types
-  PLAN_OR_REQUIREMENTS: Task 2 from docs/superpowers/plans/deployment-plan.md
-  BASE_SHA: a7981ec
-  HEAD_SHA: 3df7661
+## Workflow Integration
 
-[Subagent returns]:
-  Strengths: Clean architecture, real tests
-  Issues:
-    Important: Missing progress indicators
-    Minor: Magic number (100) for reporting interval
-  Assessment: Ready to proceed
-
-You: [Fix progress indicators]
-[Continue to Task 3]
-```
-
-## Integration with Workflows
-
-**Subagent-Driven Development:**
-- Review after EACH task
-- Catch issues before they compound
-- Fix before moving to next task
-
-**Executing Plans:**
-- Review after each task or at natural checkpoints
-- Get feedback, apply, continue
-
-**Ad-Hoc Development:**
-- Review before merge
-- Review when stuck
-
-## Red Flags
-
-**Never:**
-- Skip review because "it's simple"
-- Ignore Critical issues
-- Proceed with unfixed Important issues
-- Argue with valid technical feedback
-
-**If reviewer wrong:**
-- Push back with technical reasoning
-- Show code/tests that prove it works
-- Request clarification
-
-See template at: [code-reviewer.md](code-reviewer.md)
+- **Subagent-driven development:** retain task-scoped review after each task and one broad final review.
+- **Executing plans:** review only at plan-defined boundaries or when the user explicitly asks.
+- **Ad-hoc work:** review only on explicit request; completion alone is not a trigger.
+- **Finishing a branch:** use review only when the requested finish or integration workflow requires it.

@@ -5,7 +5,7 @@ reads the task's diff once and returns two verdicts: spec compliance and
 code quality.
 
 **Purpose:** Verify one task's implementation matches its requirements (nothing
-more, nothing less) and is well-built (clean, tested, maintainable)
+more, nothing less) and is well-built with proportionate evidence.
 
 ```
 Subagent (general-purpose):
@@ -61,19 +61,18 @@ Subagent (general-purpose):
     implementer grading their own work. Judge the code on its merits — a
     stated rationale never downgrades a finding's severity.
 
-    ## Tests
+    ## Verification Evidence
 
-    The implementer already ran the tests and reported results with TDD
-    evidence for exactly this code. Do not re-run the suite to confirm their
-    report. Run a test only when reading the code raises a specific doubt
-    that no existing run answers — and then a focused test, never a
-    package-wide suite, race detector run, or repeated/high-count loop. If
-    heavy validation seems warranted, recommend it in your report instead of
-    running it. If you cannot run commands in this environment, name the
-    test you would run.
+    The implementer's report may contain a focused test, typecheck, build,
+    smoke run, browser check, screenshot, log inspection, data query, direct
+    reproduction, or another task-appropriate observation. Do not assume a
+    new test or TDD was required.
 
-    Warnings or other noise in the implementer's reported test output are
-    findings — test output should be pristine.
+    Judge whether the reported evidence observes the task's consequential
+    outcome. Run an additional command only when reading the diff raises a
+    specific doubt that the report does not answer; choose the smallest
+    focused check. If a heavier check seems warranted, name the concrete risk
+    and recommend the check instead of running a broad suite by habit.
 
     ## Part 1: Spec Compliance
 
@@ -94,13 +93,37 @@ Subagent (general-purpose):
 
     **Code quality:**
     - Clean separation of concerns?
-    - Proper error handling?
     - DRY without premature abstraction?
-    - Edge cases handled?
+    - Is error behavior wrong on a path you can trace to a real caller?
+    - Is a consequential case mishandled — one you can demonstrate with named
+      inputs or a named call site?
 
-    **Tests:**
-    - Do the new and changed tests verify real behavior, not mocks?
-    - Are the task's edge cases covered?
+    **Speculative robustness (both directions):**
+    - A concurrency, atomicity, race, retry, timeout, null-safety, or input-
+      validation finding requires a named trigger: which two call sites
+      contend and under what deployment shape, which real caller supplies the
+      value, or which trust boundary the untrusted input crosses. Many paths
+      here have exactly one writer. "A caller could", "under concurrent
+      load", or "to be safe" is not a trigger — without one, do not report it
+      at any severity.
+    - Conversely, a lock, retry, fallback, defensive null guard, or catch-all
+      added for a condition you cannot trace to a real caller IS a finding.
+      Report it as unnecessary defensive code and recommend removing it.
+
+    **Verification:**
+    - Does the reported evidence directly support the claimed outcome?
+    - Is any consequential edge case left unsupported by code or evidence?
+    - If any test was written or changed, does every assertion anchor on one of
+      the four whitelisted values — pure function or selector return value, a
+      persisted or API field, an explicit `data-state`/`data-phase`/aria marker,
+      or an error/permission/result code? An assertion on text, CSS class, DOM
+      hierarchy, snapshot, element count, or bare existence is a finding, and
+      stays a finding when the plan's wording or a neighbouring existing test
+      used the same anchor. Absence assertions need a positive whitelisted
+      anchor alongside them.
+    - A change with no valid anchor should have been downgraded to a screenshot
+      or smoke check. An assertion invented to manufacture a red-green cycle is
+      a finding.
 
     **Structure:**
     - Does each file have one clear responsibility with a well-defined interface?
@@ -133,8 +156,9 @@ Subagent (general-purpose):
     block), that IS a finding — report it as Important, labeled
     plan-mandated. The plan's authorship does not grade its own work; the
     human decides.
-    Acknowledge what was done well before listing issues — accurate praise
-    helps the implementer trust the rest of the feedback.
+    Do not add generic praise or filler. Mention a strength only when it is
+    evidence for the approval verdict or helps distinguish a deliberate,
+    correct choice from a suspected defect.
 
     ## Output Format
 
@@ -145,9 +169,6 @@ Subagent (general-purpose):
     - ⚠️ Cannot verify from diff: [requirements you could not verify from the
       diff alone, and what the controller should check — report alongside the
       ✅/❌ verdict for everything you could verify]
-
-    ### Strengths
-    [What's well done? Be specific.]
 
     ### Issues
 

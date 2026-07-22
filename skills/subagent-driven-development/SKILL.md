@@ -1,6 +1,6 @@
 ---
 name: subagent-driven-development
-description: Use when executing a written implementation plan whose tasks are independently implementable and reviewable in the current session. Do not use for trivial work or tightly coupled tasks.
+description: Use when executing a written implementation plan whose tasks are independently implementable and reviewable and whose approved commit boundaries provide isolated task diffs. Do not use for trivial, tightly coupled, or no-commit work.
 ---
 
 # Subagent-Driven Development
@@ -11,7 +11,7 @@ Execute a durable plan by dispatching a fresh implementer worker per task, revie
 
 **Core principle:** Durable plan + fresh worker per task + task review + broad final review = focused execution without flooding the main conversation with implementation detail.
 
-Verification and testing follow the plan, project rules, and `right-sizing-tests`. TDD is required only when the user or a project rule explicitly requires it. Task-level commits are used when the approved plan includes commit boundaries; never push unless the user asks.
+Verification follows the plan and project rules. Workers use the smallest direct evidence that proves each deliverable; they add tests only when the plan or an enduring observable contract warrants them. TDD is required only when the user or a project-local rule explicitly requires it. This workflow requires plan-authorized task commits so each review and recovery record has an isolated durable range; use `executing-plans` when commits are not authorized. Never push unless the user asks.
 
 **Narration:** between tool calls, narrate at most one short line — the
 ledger and the tool results carry the record.
@@ -24,6 +24,7 @@ ledger and the tool results carry the record.
 digraph when_to_use {
     "Have implementation plan?" [shape=diamond];
     "Tasks mostly independent?" [shape=diamond];
+    "Task commits authorized?" [shape=diamond];
     "Stay in this session?" [shape=diamond];
     "subagent-driven-development" [shape=box];
     "executing-plans" [shape=box];
@@ -31,8 +32,10 @@ digraph when_to_use {
 
     "Have implementation plan?" -> "Tasks mostly independent?" [label="yes"];
     "Have implementation plan?" -> "Manual execution or brainstorm first" [label="no"];
-    "Tasks mostly independent?" -> "Stay in this session?" [label="yes"];
+    "Tasks mostly independent?" -> "Task commits authorized?" [label="yes"];
     "Tasks mostly independent?" -> "Manual execution or brainstorm first" [label="no - tightly coupled"];
+    "Task commits authorized?" -> "Stay in this session?" [label="yes"];
+    "Task commits authorized?" -> "executing-plans" [label="no"];
     "Stay in this session?" -> "subagent-driven-development" [label="yes"];
     "Stay in this session?" -> "executing-plans" [label="no - parallel session"];
 }
@@ -55,7 +58,7 @@ digraph process {
         "Dispatch implementer subagent (./implementer-prompt.md)" [shape=box];
         "Implementer subagent asks questions?" [shape=diamond];
         "Answer questions, provide context" [shape=box];
-        "Implementer subagent implements, verifies, optionally commits, self-reviews" [shape=box];
+        "Implementer subagent implements, verifies, commits task, self-reviews" [shape=box];
         "Write diff file, dispatch task reviewer subagent (./task-reviewer-prompt.md)" [shape=box];
         "Task reviewer reports spec ✅ and quality approved?" [shape=diamond];
         "Dispatch fix subagent for Critical/Important findings" [shape=box];
@@ -71,8 +74,8 @@ digraph process {
     "Dispatch implementer subagent (./implementer-prompt.md)" -> "Implementer subagent asks questions?";
     "Implementer subagent asks questions?" -> "Answer questions, provide context" [label="yes"];
     "Answer questions, provide context" -> "Dispatch implementer subagent (./implementer-prompt.md)";
-    "Implementer subagent asks questions?" -> "Implementer subagent implements, verifies, optionally commits, self-reviews" [label="no"];
-    "Implementer subagent implements, verifies, optionally commits, self-reviews" -> "Write diff file, dispatch task reviewer subagent (./task-reviewer-prompt.md)";
+    "Implementer subagent asks questions?" -> "Implementer subagent implements, verifies, commits task, self-reviews" [label="no"];
+    "Implementer subagent implements, verifies, commits task, self-reviews" -> "Write diff file, dispatch task reviewer subagent (./task-reviewer-prompt.md)";
     "Write diff file, dispatch task reviewer subagent (./task-reviewer-prompt.md)" -> "Task reviewer reports spec ✅ and quality approved?";
     "Task reviewer reports spec ✅ and quality approved?" -> "Dispatch fix subagent for Critical/Important findings" [label="no"];
     "Dispatch fix subagent for Critical/Important findings" -> "Write diff file, dispatch task reviewer subagent (./task-reviewer-prompt.md)" [label="re-review"];
@@ -107,7 +110,7 @@ Use the least powerful model that can handle each role to conserve cost and incr
 **Integration and judgment tasks** (multi-file coordination, pattern matching, debugging): use a standard model.
 
 **Architecture and design tasks**: use the most capable available model.
-The final whole-branch review is one of these — dispatch it on the most
+The final whole-change review is one of these — dispatch it on the most
 capable available model, not the session default.
 
 **Review tasks**: choose the model with the same judgment, scaled to the
@@ -161,12 +164,12 @@ review — send it back to the implementer and re-review.
 ## Constructing Reviewer Prompts
 
 Per-task reviews are task-scoped gates. The broad review happens once, at the
-final whole-branch review. When you fill a reviewer template:
+final whole-change review. When you fill a reviewer template:
 
 - Do not add open-ended directives like "check all uses" or "run race tests
   if useful" without a concrete, task-specific reason
-- Do not ask a reviewer to re-run tests the implementer already ran on the
-  same code — the implementer's report carries the test evidence
+- Do not ask a reviewer to repeat verification the implementer already ran on
+  the same code unless reading raises a concrete unanswered doubt
 - Do not pre-judge findings for the reviewer — never instruct a reviewer to
   ignore or not flag a specific issue. If you believe a finding would be a
   false positive, let the reviewer raise it and adjudicate it in the review
@@ -178,7 +181,7 @@ final whole-branch review. When you fill a reviewer template:
   Constraints section or the spec: exact values, exact formats, and the
   stated relationships between components ("same layout as X", "matches
   Y"). The reviewer's template already carries the process rules (YAGNI,
-  test hygiene, review method) — the constraints block is for what THIS
+  verification discipline, review method) — the constraints block is for what THIS
   project's spec demands.
 - Hand the reviewer its diff as a file: run this skill's
   `scripts/review-package BASE HEAD` and pass the reviewer the file path
@@ -195,25 +198,23 @@ final whole-branch review. When you fill a reviewer template:
   touches, and the global constraints. Nothing else.
 - Dispatch fix subagents for Critical and Important findings. Record Minor
   findings in the progress ledger as you go, and point the final
-  whole-branch review at that list so it can triage which must be fixed
-  before merge. A roll-up nobody reads is a silent discard.
+  whole-change review at that list so it can decide whether any affect the
+  accepted outcome. A roll-up nobody reads is a silent discard.
 - A finding labeled plan-mandated — or any finding that conflicts with
   what the plan's text requires — is the human's decision, like any plan
   contradiction: present the finding and the plan text, ask which governs.
   Do not dismiss the finding because the plan mandates it, and do not
   dispatch a fix that contradicts the plan without asking.
-- The final whole-branch review gets a package too: run
+- The final whole-change review gets a package too: run
   `scripts/review-package MERGE_BASE HEAD` (MERGE_BASE = the commit the
   branch started from, e.g. `git merge-base main HEAD`) and include the
   printed path in the final review dispatch, so the final reviewer reads
   one file instead of re-deriving the branch diff with git commands.
 - Every fix dispatch carries the implementer contract: the fix subagent
-  re-runs the tests covering its change and reports the results. Name the
-  covering test files in the dispatch — a one-line fix does not need the
-  whole suite. Before re-dispatching the reviewer, confirm the fix report
-  contains the covering tests, the command run, and the output; dispatch
-  the re-review once all three are present.
-- If the final whole-branch review returns findings, dispatch ONE fix
+  re-runs the smallest verification covering its change and reports the
+  result. Before re-dispatching the reviewer, confirm the fix report names
+  the observed outcome, command or check, and result.
+- If the final whole-change review returns findings, dispatch ONE fix
   subagent with the complete findings list — not one fixer per finding.
   Per-finding fixers each rebuild context and re-run suites; a real
   session's final-review fix wave cost more than all its tasks combined.
@@ -238,11 +239,12 @@ and is re-read on every later turn. Hand artifacts over as files:
 - **Report file:** name the implementer's report file after the brief
   (brief `…/task-N-brief.md` → report `…/task-N-report.md`) and put it in
   the dispatch prompt. The implementer writes the full report there and
-  returns only status, commits, a one-line test summary, and concerns.
+  returns only status, any plan-authorized commits, a one-line verification
+  summary, and concerns.
 - **Reviewer inputs:** the task reviewer gets three paths — the same brief
   file, the report file, and the review package — plus the global
   constraints that bind the task.
-- Fix dispatches append their fix report (with test results) to the same
+- Fix dispatches append their fix report (with verification results) to the same
   report file and return a short summary; re-reviews read the updated file.
 
 ## Durable Progress
@@ -290,13 +292,13 @@ You: "User level (~/.config/superpowers/hooks/)"
 Implementer: "Got it. Implementing now..."
 [Later] Implementer:
   - Implemented install-hook command
-  - Added tests, 5/5 passing
+  - Focused install/uninstall smoke checks passed
   - Self-review: Found I missed --force flag, added it
-  - Committed
+  - Created the plan-authorized task commit
 
 [Run review-package, dispatch task reviewer with the printed path]
 Task reviewer: Spec ✅ - all requirements met, nothing extra.
-  Strengths: Good test coverage, clean. Issues: None. Task quality: Approved.
+  Evidence matches the requested behavior. Issues: None. Task quality: Approved.
 
 [Mark Task 1 complete]
 
@@ -307,9 +309,9 @@ Task 2: Recovery modes
 Implementer: [No questions, proceeds]
 Implementer:
   - Added verify/repair modes
-  - 8/8 tests passing
+  - Focused recovery-mode verification passed
   - Self-review: All good
-  - Committed
+  - Created the plan-authorized task commit
 
 [Run review-package, dispatch task reviewer with the printed path]
 Task reviewer: Spec ❌:
@@ -329,7 +331,7 @@ Task reviewer: Spec ✅. Task quality: Approved.
 
 [After all tasks]
 [Dispatch final code-reviewer]
-Final reviewer: All requirements met, ready to merge
+Final reviewer: All requirements met; plan execution approved
 
 Done!
 ```
@@ -369,7 +371,8 @@ Done!
 ## Red Flags
 
 **Never:**
-- Start implementation on main/master branch without explicit user consent
+- Dispatch the first implementer while the working tree holds uncommitted changes you did not make — ask the user how to proceed first, and never clear them yourself
+- Create or switch branches, or create a worktree, without user, project, or approved-plan authority
 - Skip task review, or accept a report missing either verdict (spec compliance AND task quality are both required)
 - Proceed with unfixed issues
 - Dispatch multiple implementation subagents in parallel (conflicts)
@@ -414,7 +417,6 @@ Done!
 - **finishing-a-development-branch** - Completes development when the user asks to finish or integrate the branch.
 
 **Workers should use:**
-- **right-sizing-tests** - Follow the plan's evidence strategy and prevent disproportionate testing.
 - **test-driven-development** - Use only when the task explicitly requires strict red-green TDD.
 
 **Alternative workflow:**

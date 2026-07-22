@@ -21,6 +21,6 @@ Do not propose a fix before the evidence identifies the failing boundary.
 
 ## Implementation
 
-Fix the source of the problem with one focused change. Decide whether to add a test through `right-sizing-tests`; debugging complexity alone does not require TDD. A smoke run, existing check, log inspection, or direct reproduction may be sufficient.
+Fix the source of the problem with one focused change. Debugging complexity alone does not require a new test or TDD. Prefer the cheapest direct evidence that observes the consequential outcome: the original reproduction, an existing focused check, a smoke run, log inspection, or a data query. Add a regression test only when it protects an enduring observable contract; use strict TDD only when the user explicitly requests it or a project-local rule independently requires it.
 
 Verify the original symptom and report the evidence used.
