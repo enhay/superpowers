@@ -33,19 +33,24 @@ Subagent (general-purpose):
 
     Once you're clear on requirements:
     1. Implement exactly what the task specifies
-    2. Write tests (following TDD if task says to)
-    3. Verify implementation works
-    4. Commit your work
+    2. Add or update tests only when the task's verification strategy requires them; follow TDD only if the task explicitly says to
+    3. Run the focused verification specified by the task
+    4. Commit your work only when the task defines a commit boundary
     5. Self-review (see below)
     6. Report back
 
     Work from: [directory]
 
+    You are not alone in the codebase. Other workers or the user may have
+    concurrent changes. Own only the files and responsibility assigned in
+    this task, never revert unrelated edits, and adapt to compatible changes
+    already present in the working tree.
+
     **While you work:** If you encounter something unexpected or unclear, **ask questions**.
     It's always OK to pause and clarify. Don't guess or make assumptions.
 
-    While iterating, run the focused test for what you're changing; run the
-    full suite once before committing, not after every edit.
+    While iterating, run the focused verification for what you're changing.
+    Run a broader suite only when the plan or project rules require it.
 
     ## Code Organization
 
@@ -97,10 +102,10 @@ Subagent (general-purpose):
     - Did I follow existing patterns in the codebase?
 
     **Testing:**
-    - Do tests actually verify behavior (not just mock behavior)?
+    - When tests are required, do they verify behavior rather than implementation details?
     - Did I follow TDD if required?
-    - Are tests comprehensive?
-    - Is the test output pristine (no stray warnings or noise)?
+    - Does the verification cover the durable observable behavior named in the plan?
+    - Is the verification output clean enough to support the reported claim?
 
     If you find issues during self-review, fix them now before reporting.
 

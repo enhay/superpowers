@@ -1,15 +1,17 @@
 ---
 name: subagent-driven-development
-description: Use when executing implementation plans with independent tasks in the current session
+description: Use when executing a written implementation plan whose tasks are independently implementable and reviewable in the current session. Do not use for trivial work or tightly coupled tasks.
 ---
 
 # Subagent-Driven Development
 
-Execute plan by dispatching a fresh implementer subagent per task, a task review (spec compliance + code quality) after each, and a broad whole-branch review at the end.
+Execute a durable plan by dispatching a fresh implementer worker per task, reviewing each task for requirements and code quality, and performing a broad whole-change review at the end.
 
 **Why subagents:** You delegate tasks to specialized agents with isolated context. By precisely crafting their instructions and context, you ensure they stay focused and succeed at their task. They should never inherit your session's context or history — you construct exactly what they need. This also preserves your own context for coordination work.
 
-**Core principle:** Fresh subagent per task + task review (spec + quality) + broad final review = high quality, fast iteration
+**Core principle:** Durable plan + fresh worker per task + task review + broad final review = focused execution without flooding the main conversation with implementation detail.
+
+Verification and testing follow the plan, project rules, and `right-sizing-tests`. TDD is required only when the user or a project rule explicitly requires it. Task-level commits are used when the approved plan includes commit boundaries; never push unless the user asks.
 
 **Narration:** between tool calls, narrate at most one short line — the
 ledger and the tool results carry the record.
@@ -53,7 +55,7 @@ digraph process {
         "Dispatch implementer subagent (./implementer-prompt.md)" [shape=box];
         "Implementer subagent asks questions?" [shape=diamond];
         "Answer questions, provide context" [shape=box];
-        "Implementer subagent implements, tests, commits, self-reviews" [shape=box];
+        "Implementer subagent implements, verifies, optionally commits, self-reviews" [shape=box];
         "Write diff file, dispatch task reviewer subagent (./task-reviewer-prompt.md)" [shape=box];
         "Task reviewer reports spec ✅ and quality approved?" [shape=diamond];
         "Dispatch fix subagent for Critical/Important findings" [shape=box];
@@ -63,14 +65,14 @@ digraph process {
     "Read plan, note context and global constraints, create todos" [shape=box];
     "More tasks remain?" [shape=diamond];
     "Dispatch final code reviewer subagent (../requesting-code-review/code-reviewer.md)" [shape=box];
-    "Use superpowers:finishing-a-development-branch" [shape=box style=filled fillcolor=lightgreen];
+    "Report plan complete; finish branch only if requested" [shape=box style=filled fillcolor=lightgreen];
 
     "Read plan, note context and global constraints, create todos" -> "Dispatch implementer subagent (./implementer-prompt.md)";
     "Dispatch implementer subagent (./implementer-prompt.md)" -> "Implementer subagent asks questions?";
     "Implementer subagent asks questions?" -> "Answer questions, provide context" [label="yes"];
     "Answer questions, provide context" -> "Dispatch implementer subagent (./implementer-prompt.md)";
-    "Implementer subagent asks questions?" -> "Implementer subagent implements, tests, commits, self-reviews" [label="no"];
-    "Implementer subagent implements, tests, commits, self-reviews" -> "Write diff file, dispatch task reviewer subagent (./task-reviewer-prompt.md)";
+    "Implementer subagent asks questions?" -> "Implementer subagent implements, verifies, optionally commits, self-reviews" [label="no"];
+    "Implementer subagent implements, verifies, optionally commits, self-reviews" -> "Write diff file, dispatch task reviewer subagent (./task-reviewer-prompt.md)";
     "Write diff file, dispatch task reviewer subagent (./task-reviewer-prompt.md)" -> "Task reviewer reports spec ✅ and quality approved?";
     "Task reviewer reports spec ✅ and quality approved?" -> "Dispatch fix subagent for Critical/Important findings" [label="no"];
     "Dispatch fix subagent for Critical/Important findings" -> "Write diff file, dispatch task reviewer subagent (./task-reviewer-prompt.md)" [label="re-review"];
@@ -78,7 +80,7 @@ digraph process {
     "Mark task complete in todo list and progress ledger" -> "More tasks remain?";
     "More tasks remain?" -> "Dispatch implementer subagent (./implementer-prompt.md)" [label="yes"];
     "More tasks remain?" -> "Dispatch final code reviewer subagent (../requesting-code-review/code-reviewer.md)" [label="no"];
-    "Dispatch final code reviewer subagent (../requesting-code-review/code-reviewer.md)" -> "Use superpowers:finishing-a-development-branch";
+    "Dispatch final code reviewer subagent (../requesting-code-review/code-reviewer.md)" -> "Report plan complete; finish branch only if requested";
 }
 ```
 
@@ -267,7 +269,7 @@ a ledger file, not only in todos.
 
 - [implementer-prompt.md](implementer-prompt.md) - Dispatch implementer subagent
 - [task-reviewer-prompt.md](task-reviewer-prompt.md) - Dispatch task reviewer subagent (spec compliance + code quality)
-- Final whole-branch review: use superpowers:requesting-code-review's [code-reviewer.md](../requesting-code-review/code-reviewer.md)
+- Final whole-branch review: use requesting-code-review's [code-reviewer.md](../requesting-code-review/code-reviewer.md)
 
 ## Example Workflow
 
@@ -335,7 +337,7 @@ Done!
 ## Advantages
 
 **vs. Manual execution:**
-- Subagents follow TDD naturally
+- Workers follow the plan's focused verification strategy
 - Fresh context per task (no confusion)
 - Parallel-safe (subagents don't interfere)
 - Subagent can ask questions (before AND during work)
@@ -406,13 +408,14 @@ Done!
 ## Integration
 
 **Required workflow skills:**
-- **superpowers:using-git-worktrees** - Ensures isolated workspace (creates one or verifies existing)
-- **superpowers:writing-plans** - Creates the plan this skill executes
-- **superpowers:requesting-code-review** - Code review template for the final whole-branch review
-- **superpowers:finishing-a-development-branch** - Complete development after all tasks
+- **using-git-worktrees** - Creates or verifies an isolated worktree when the user requests one or isolation is required.
+- **writing-plans** - Creates the durable plan this skill executes.
+- **requesting-code-review** - Provides the final whole-change review workflow.
+- **finishing-a-development-branch** - Completes development when the user asks to finish or integrate the branch.
 
-**Subagents should use:**
-- **superpowers:test-driven-development** - Subagents follow TDD for each task
+**Workers should use:**
+- **right-sizing-tests** - Follow the plan's evidence strategy and prevent disproportionate testing.
+- **test-driven-development** - Use only when the task explicitly requires strict red-green TDD.
 
 **Alternative workflow:**
-- **superpowers:executing-plans** - Use for parallel session instead of same-session execution
+- **executing-plans** - Use for main-agent execution when tasks are tightly coupled or worker delegation adds no value.
