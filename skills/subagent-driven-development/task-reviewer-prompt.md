@@ -85,6 +85,14 @@ Subagent (general-purpose):
     - **Misunderstood:** right feature built the wrong way, wrong problem
       solved
 
+    One exception to Extra: the implementer may fix a real defect found on the
+    call path its task runs through, if the report declares it and identifies
+    the lines. Judge such a fix on its own merits — correct, verified, and
+    genuinely on the touched path, or not. Do not flag it as out of scope
+    merely because the task did not name it. An undeclared change, a tier-2
+    cleanup of adjacent code, or a fix that alters a public contract, data
+    semantics, or permissions IS a finding.
+
     If a requirement cannot be verified from this diff alone (it lives in
     unchanged code or spans tasks), report it as a ⚠️ item instead of
     broadening your search.

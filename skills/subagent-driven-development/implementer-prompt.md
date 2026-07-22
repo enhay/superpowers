@@ -91,8 +91,32 @@ Subagent (general-purpose):
       it as DONE_WITH_CONCERNS — don't split files on your own without plan guidance
     - If an existing file you're modifying is already large or tangled, work carefully
       and note it as a concern in your report
-    - In existing codebases, follow established patterns. Make only edits that
-      trace to the task, and remove only orphaned code created by your change.
+    - In existing codebases, follow established patterns. Remove only orphaned
+      code created by your change.
+
+    ## Defects You Find Along the Way
+
+    Sort what you notice into three tiers:
+
+    1. **A real defect on the path you are touching** — a correctness bug in
+       the call chain your task runs through. Fix it. Leaving it means your
+       deliverable sits on a broken foundation and the next reader rediscovers
+       it. Report it under its own heading: what was wrong, which lines are
+       the fix, and how you verified it separately from the task.
+    2. **Adjacent code that merely could be better** — naming, duplication,
+       structure, formatting, dead code that predates you. Do not touch it.
+       Name it in your report with file, line, the problem, and rough cost.
+    3. **An unrelated gap elsewhere** — report it flat, in one or two
+       sentences. Do not fix it and do not treat it as urgent.
+
+    Stop and report instead of fixing, even for tier 1, when the fix would
+    change a public contract, data semantics, permissions, or require a
+    migration. Those are decisions, not drive-by repairs.
+
+    Never let a tier-1 fix become untraceable. It must be separable from the
+    task diff — its own commit, or explicitly listed lines in the report — so
+    the reviewer can judge it on its own merits rather than discovering
+    unexplained edits.
 
     ## When You're in Over Your Head
 

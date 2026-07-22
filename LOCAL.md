@@ -18,6 +18,7 @@ Branch: `local/v6.1.1`
 - Code review skills trigger only from explicit review requests or approved workflow boundaries, and only at a code change — never at a plan, spec, or other document; reviewer prompts are evidence-first and scope-bounded. Speculative robustness findings (race, retry, null-safety, input validation) require a named trigger, and unjustified defensive code is itself a finding.
 - `writing-plans` carries the plan/spec review checklist; plan review is main-agent work, never a reviewer subagent.
 - SDD worker and reviewer prompts carry the default-deny assertion whitelist; `verification-before-completion` carries the consumer-path, quantify-before-negative, and visual-gate traps.
+- A worker may fix a real defect on the call path its task touches if it declares the fix separately; adjacent cleanup and unrelated gaps are reported, not fixed. The reviewer judges a declared fix on its merits instead of flagging it as out of scope.
 - `systematic-debugging`, `test-driven-development`, and `writing-skills` carry local narrow-trigger overrides.
 
 ## Updating
