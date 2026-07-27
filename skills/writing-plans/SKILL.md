@@ -26,22 +26,51 @@ exist, or a narrow fact check against an existing document. Those stay on the
 direct `inspect -> answer` path. A user mentioning “plan” or “spec” is not by
 itself a trigger.
 
-## Artifact Escalation
+## Artifact Decision
 
-Choose the smallest durable artifact that fits the work:
+Choose the document from the delivery shape, not from the technical topic. Run
+these decisions in order:
 
-- **Commit-level change:** The change is local and its intent can be explained in a commit message. Do not create a plan or spec.
-- **One implementation plan:** The requirements are established, but the work spans multiple reviewable tasks. Write one plan.
-- **Spec then plans:** Architecture, UX, data semantics, public interfaces, or genuinely independent product subsystems still need durable decisions. Write or update a spec first, then create one or more plans. Multiple repositories or services alone do not require a spec: when one team can ship them together under one final contract, keep one coordinated plan.
+1. **No durable artifact:** If the outcome is a local change, a direct answer,
+   or a short diagnosis, stay on `inspect -> implement -> verify` or
+   `inspect -> answer`. Do not create a plan or spec.
+2. **One implementation plan:** If one team can own one observable business
+   outcome and release it through one coordinated path, write one plan. This
+   remains true when the plan spans repositories or includes UX, data
+   semantics, architecture, or public interfaces. A single plan never requires
+   a spec merely because those topics are present.
+3. **Spec then plans:** Create a spec first only when two or more independently
+   reviewable implementation plans need the same durable architecture,
+   business semantics, or public contract before they can be split, or when the
+   user explicitly requests a spec. The spec is a shared decision record; it is
+   not a mandatory preface to one plan.
+
+The number of files, repositories, services, screens, or unresolved
+implementation choices does not by itself select the spec route. If one plan
+can carry the decision, acceptance, tasks, and verification, keep the decision
+there and update that plan as it becomes more precise.
+
+### Artifact Roles
+
+- **Plan:** The executable delivery document: goal, acceptance, chosen
+  architecture, final interfaces, task boundaries, verification, and any
+  necessary release order.
+- **Spec:** The durable decision record shared by multiple plans, or explicitly
+  requested by the user: problem framing, constraints, decisions, alternatives,
+  non-goals, invariants, and cross-plan contracts. It must not duplicate one
+  plan's task list, file inventory, or acceptance section.
 
 Save plans to `docs/plans/YYYY-MM-DD-<slug>.md`. User or project instructions override this path.
 
 ## Before Writing
 
 1. Inspect the real code, entrypoints, consumers, tests, and existing documents relevant to the task.
-2. Separate established requirements from assumptions and unresolved decisions.
-3. If an unresolved decision would materially change architecture, UX, data semantics, a public interface, or an irreversible outcome, ask one consolidated question before locking the plan.
-4. Do not invoke brainstorming just to manufacture alternatives. Use it only when a real design decision remains unresolved.
+2. Select the artifact route above before writing a document.
+3. Separate established requirements from assumptions and unresolved decisions.
+4. For a one-plan route, ask one consolidated question only when the user must
+   choose before implementation can state a final contract; otherwise make the
+   uncertainty the first bounded task and keep the plan live.
+5. Do not invoke brainstorming just to manufacture alternatives. Use it only when a real design decision remains unresolved.
 
 ## Default Delivery Model
 
@@ -80,7 +109,9 @@ is speculative and stays out of the spec and plan.
 
 **Architecture:** The chosen approach and the important boundaries, in a few sentences.
 
-**Global constraints:** Exact cross-task requirements copied from the spec, project rules, or verified code contracts.
+**Global constraints:** Exact cross-task requirements from user decisions,
+verified code contracts, project rules, or (when a spec exists) only its
+binding decisions. Do not copy a spec's context or task prose into the plan.
 
 ## File structure
 
@@ -122,6 +153,7 @@ Split by deliverable and responsibility, not by technical layer. Follow the exis
 - speculative capacity or concurrency work without named contending call sites and deployment topology;
 - backward-compatibility layers, dual reads or writes, staged rollout, canary gates, or rollback matrices when all internal callers can ship together;
 - service dependency diagrams when a final contract, necessary deployment order, and consumer-path verification fully describe the change;
+- a spec that merely restates one plan's goal, tasks, file inventory, or acceptance criteria;
 - placeholders such as `TBD`, `implement later`, or “add suitable tests”;
 - copied context already recorded in a spec, ADR, issue, or existing plan;
 - long prose that does not constrain implementation or verification.
@@ -139,39 +171,43 @@ A plan cannot be proven by running it, and every downstream task inherits its
 mistakes. So review only what is expensive to reverse once built and invisible
 in a later diff:
 
-1. **Premises.** Which load-bearing facts were verified against real data, and
+1. **Artifact fit.** Does one plan own one observable outcome? If yes, a
+   separate spec is unnecessary unless the user explicitly requested it. If a
+   spec exists, does it govern more than one plan or contain a decision that
+   should stand independently?
+2. **Premises.** Which load-bearing facts were verified against real data, and
    which are inference? A plan built on an unverified premise fails whole.
-2. **Falsifiable acceptance.** Can you state the observation that decides
+3. **Falsifiable acceptance.** Can you state the observation that decides
    success — and what failure would look like, such that the plan could be
    judged not worth keeping?
-3. **Boundaries and contracts.** Ownership of data, who calls whom, the final
+4. **Boundaries and contracts.** Ownership of data, who calls whom, the final
    interface shapes, and which external or independently released callers
    cannot change in the coordinated release.
-4. **Data semantics.** Denominators, time windows, join keys, and exclusions
+5. **Data semantics.** Denominators, time windows, join keys, and exclusions
    pinned exactly. Wrong calibration produces wrong numbers that pass every
    test.
-5. **State and migration.** What happens to existing data, whether one bounded
+6. **State and migration.** What happens to existing data, whether one bounded
    migration reaches the correct final model, and whether legacy fields or
    fallbacks are removed. Require coexistence only when a named caller cannot
    ship together, and give that compatibility window an exit condition.
-6. **Concurrency and failure handling.** Every proposed lock or idempotency
+7. **Concurrency and failure handling.** Every proposed lock or idempotency
    mechanism names the real contending call sites, duplicate delivery source,
    and deployment shape. Every retry, timeout, fallback, or compensation names
    the observed failure boundary and why the mechanism changes the outcome.
    Service count and hypothetical future load are not evidence.
-7. **Release coupling.** Treat a cross-repository change owned and released by
+8. **Release coupling.** Treat a cross-repository change owned and released by
    one team as one deliverable unless ownership, timing, or rollback is truly
    independent. Record only the necessary deployment order and end-to-end
    consumer check; do not manufacture staged rollout.
-8. **Permissions and PII.** Who can see what, tenant isolation, and which
+9. **Permissions and PII.** Who can see what, tenant isolation, and which
    fields reach user-visible output.
-9. **Irreversible points.** Which step cannot be undone — that is where commit
+10. **Irreversible points.** Which step cannot be undone — that is where commit
    boundaries and stronger verification belong, not spread evenly.
-10. **Task independence.** Hidden ordering dependencies or two tasks editing
+11. **Task independence.** Hidden ordering dependencies or two tasks editing
    the same file decide the execution route.
-11. **Proportion.** A plan too heavy for its problem is a finding, in both
+12. **Proportion.** A plan too heavy for its problem is a finding, in both
    directions.
-12. **Implicit decisions.** Find the business choices the plan quietly made —
+13. **Implicit decisions.** Find the business choices the plan quietly made —
     a threshold, a default, a calibration — without surfacing them for the
     user.
 
