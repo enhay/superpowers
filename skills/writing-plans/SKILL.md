@@ -17,7 +17,7 @@ Choose the smallest durable artifact that fits the work:
 
 - **Commit-level change:** The change is local and its intent can be explained in a commit message. Do not create a plan or spec.
 - **One implementation plan:** The requirements are established, but the work spans multiple reviewable tasks. Write one plan.
-- **Spec then plans:** Architecture, UX, data semantics, public interfaces, or multiple independent subsystems still need durable decisions. Write or update a spec first, then create one or more plans.
+- **Spec then plans:** Architecture, UX, data semantics, public interfaces, or genuinely independent product subsystems still need durable decisions. Write or update a spec first, then create one or more plans. Multiple repositories or services alone do not require a spec: when one team can ship them together under one final contract, keep one coordinated plan.
 
 Save plans to `docs/plans/YYYY-MM-DD-<slug>.md`. User or project instructions override this path.
 
@@ -27,6 +27,32 @@ Save plans to `docs/plans/YYYY-MM-DD-<slug>.md`. User or project instructions ov
 2. Separate established requirements from assumptions and unresolved decisions.
 3. If an unresolved decision would materially change architecture, UX, data semantics, a public interface, or an irreversible outcome, ask one consolidated question before locking the plan.
 4. Do not invoke brainstorming just to manufacture alternatives. Use it only when a real design decision remains unresolved.
+
+## Default Delivery Model
+
+Plan for the observed system and delivery team, not hypothetical future scale.
+When internal producers and consumers can be changed and released together,
+default to:
+
+- one final contract and one coordinated release;
+- one plan for the cross-repository business outcome;
+- the smallest necessary deployment order or a brief maintenance window when
+  an intermediate version combination is unsafe;
+- one direct end-to-end check through the real consumer path.
+
+Do not add high-concurrency architecture, distributed locks, generalized
+retries, dual reads or writes, version matrices, staged rollout, canary gates,
+or long-lived backward compatibility merely because several services are
+involved. Locks and idempotency require concrete contending writers or
+duplicate delivery. Compatibility and staged rollout require an independently
+released or external consumer, or an unavoidable mixed-version window.
+Recovery planning requires a genuinely irreversible data, permission, or
+financial operation.
+
+Low traffic does not disprove a correctness race. Duplicate payment callbacks,
+two jobs writing the same order, or another traceable contention point still
+deserve an explicit invariant. Without such a trigger, concurrency hardening
+is speculative and stays out of the spec and plan.
 
 ## Required Plan Structure
 
@@ -78,6 +104,9 @@ Split by deliverable and responsibility, not by technical layer. Follow the exis
 - complete implementation functions or routine test bodies;
 - mandatory red-green steps for work that does not warrant TDD;
 - ceremonial rollout, migration, or governance steps without real production risk;
+- speculative capacity or concurrency work without named contending call sites and deployment topology;
+- backward-compatibility layers, dual reads or writes, staged rollout, canary gates, or rollback matrices when all internal callers can ship together;
+- service dependency diagrams when a final contract, necessary deployment order, and consumer-path verification fully describe the change;
 - placeholders such as `TBD`, `implement later`, or “add suitable tests”;
 - copied context already recorded in a spec, ADR, issue, or existing plan;
 - long prose that does not constrain implementation or verification.
@@ -100,23 +129,34 @@ in a later diff:
 2. **Falsifiable acceptance.** Can you state the observation that decides
    success — and what failure would look like, such that the plan could be
    judged not worth keeping?
-3. **Boundaries and contracts.** Ownership of data, who calls whom, interface
-   shapes, and which contracts break external callers if changed.
+3. **Boundaries and contracts.** Ownership of data, who calls whom, the final
+   interface shapes, and which external or independently released callers
+   cannot change in the coordinated release.
 4. **Data semantics.** Denominators, time windows, join keys, and exclusions
    pinned exactly. Wrong calibration produces wrong numbers that pass every
    test.
-5. **State and migration.** What happens to existing data, how long old and
-   new coexist, and whether the plan corrects the model or layers compatibility
-   over a bad shape.
-6. **Permissions and PII.** Who can see what, tenant isolation, and which
+5. **State and migration.** What happens to existing data, whether one bounded
+   migration reaches the correct final model, and whether legacy fields or
+   fallbacks are removed. Require coexistence only when a named caller cannot
+   ship together, and give that compatibility window an exit condition.
+6. **Concurrency and failure handling.** Every proposed lock or idempotency
+   mechanism names the real contending call sites, duplicate delivery source,
+   and deployment shape. Every retry, timeout, fallback, or compensation names
+   the observed failure boundary and why the mechanism changes the outcome.
+   Service count and hypothetical future load are not evidence.
+7. **Release coupling.** Treat a cross-repository change owned and released by
+   one team as one deliverable unless ownership, timing, or rollback is truly
+   independent. Record only the necessary deployment order and end-to-end
+   consumer check; do not manufacture staged rollout.
+8. **Permissions and PII.** Who can see what, tenant isolation, and which
    fields reach user-visible output.
-7. **Irreversible points.** Which step cannot be undone — that is where commit
+9. **Irreversible points.** Which step cannot be undone — that is where commit
    boundaries and stronger verification belong, not spread evenly.
-8. **Task independence.** Hidden ordering dependencies or two tasks editing
+10. **Task independence.** Hidden ordering dependencies or two tasks editing
    the same file decide the execution route.
-9. **Proportion.** A plan too heavy for its problem is a finding, in both
+11. **Proportion.** A plan too heavy for its problem is a finding, in both
    directions.
-10. **Implicit decisions.** Find the business choices the plan quietly made —
+12. **Implicit decisions.** Find the business choices the plan quietly made —
     a threshold, a default, a calibration — without surfacing them for the
     user.
 
