@@ -1,6 +1,6 @@
 ---
 name: writing-plans
-description: Use when a medium or larger task needs a durable implementation plan before code changes, when the user explicitly asks for a plan, or when the user asks to review or critique an existing plan or spec. Skip trivial and small tasks that can be completed directly.
+description: Use only when a durable implementation plan must be written or updated, or when a formal implementation-readiness review of a plan/spec is itself the requested deliverable. Do not use to decide whether planning is needed, explain planning policy, inspect why plan/spec files exist, or answer a narrow question about an artifact.
 ---
 
 # Writing Plans
@@ -10,6 +10,21 @@ description: Use when a medium or larger task needs a durable implementation pla
 Turn verified requirements and current code facts into a durable implementation plan. Keep the plan at contract level so a capable main agent or worker can implement it without copying speculative code from the planning stage.
 
 Do not use this skill merely because a task has several steps. Trivial and small work stays on the direct `inspect -> implement -> verify` path.
+
+## Trigger Boundary
+
+Invoke this skill only after direct inspection establishes that the durable
+artifact is part of the requested outcome:
+
+- write or update an implementation plan for medium or larger work;
+- perform a formal review of a plan/spec for implementation readiness, with
+  findings on premises, contracts, task boundaries, acceptance, and risk.
+
+Do not invoke it for a conversation about whether a plan or spec is warranted,
+an explanation of the planning workflow, a question about why two documents
+exist, or a narrow fact check against an existing document. Those stay on the
+direct `inspect -> answer` path. A user mentioning “plan” or “spec” is not by
+itself a trigger.
 
 ## Artifact Escalation
 
