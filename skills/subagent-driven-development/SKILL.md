@@ -10,10 +10,16 @@ task, and running one broad review at the end. Workers never inherit your sessio
 history — you construct exactly the context each one needs, which also keeps your
 own context free for coordination.
 
+**Dispatch** here means: start a worker that does not inherit this conversation's
+history, by whatever mechanism the harness provides. The prompt templates in this
+skill are the worker's message — content, not a call signature.
+
 Use this only when the plan exists, its tasks are mostly independent, and it
 authorizes task-level commits (review and recovery both depend on isolated task
-diffs). Tightly coupled or no-commit plans run directly on the main line instead.
-Never push unless the user asks.
+diffs). Commit authority comes from the user, a project rule, or a plan the user
+approved — a plan you wrote yourself does not create it. Without that authority, or
+when tasks are tightly coupled, execute the plan yourself, serially, in the current
+checkout. Never push unless the user asks.
 
 Verification follows the plan and project rules: the smallest direct evidence that
 proves each deliverable, tests only when the plan or an enduring observable
@@ -40,28 +46,40 @@ plan text that mandates it, asking which governs. Clean scan: proceed silently.
 3. Dispatch implementer with [implementer-prompt.md](implementer-prompt.md).
 4. Answer any questions, then let it implement, verify, commit, self-review.
 5. `scripts/review-package BASE HEAD` → diff file path.
-6. Dispatch task reviewer with [task-reviewer-prompt.md](task-reviewer-prompt.md).
-7. Dispatch one fix subagent for Critical/Important findings, then re-review.
+6. Review the task. Prefer the harness's own review capability, handing it the
+   brief as its custom review instructions and the package as its diff; only when
+   the harness has none, dispatch a worker with
+   [task-reviewer-prompt.md](task-reviewer-prompt.md). Follow the reviewer's own
+   output contract rather than imposing a second one.
+7. Dispatch one fix worker for the findings that block the task, then re-review.
 8. Append one line to the ledger and move on.
+
+Spec compliance is yours to adjudicate either way: a native reviewer reports
+defects in the code, not whether the task matched the brief it was given.
 
 BASE is the commit you recorded, never `HEAD~1` — that silently drops all but the
 last commit of a multi-commit task.
 
 After the last task, run one broad whole-change review over
-`scripts/review-package MERGE_BASE HEAD` (`git merge-base main HEAD`). Use the
-harness's own code-review command where one exists; otherwise reuse the task
-reviewer template with the branch package as its diff. If it returns findings,
-dispatch ONE fix subagent with the complete list — per-finding fixers each rebuild
-context and re-run suites, and cost more than the tasks did.
+`scripts/review-package MERGE_BASE HEAD`. Resolve MERGE_BASE from the plan, the
+project's stated integration branch, or the current branch's upstream — never
+assume `main` exists. Use the harness's own review capability where one exists;
+otherwise reuse the task reviewer template with the branch package as its diff. If
+it returns findings, dispatch ONE fix worker with the complete list — per-finding
+fixers each rebuild context and re-run suites, and cost more than the tasks did.
 
 ## Model selection
 
-Always specify the model explicitly; an omitted model inherits your session's, which
-is usually the most expensive one. Match the model to the work: transcription of
-complete plan code or a single-file mechanical fix takes the cheapest tier;
-multi-file integration and prose-described implementation take a mid tier as the
-floor; architecture, design, and the final whole-change review take the most
-capable. Reviewers scale with the diff's risk, not its existence.
+Only when the harness lets you choose a worker's model, and you know what its
+options map to. Where it does, specify explicitly — an omitted model usually
+inherits your session's, which is usually the most expensive one. Where it does
+not, skip this section entirely rather than inventing a model name.
+
+Match the model to the work: transcription of complete plan code or a single-file
+mechanical fix takes the cheapest tier; multi-file integration and prose-described
+implementation take a mid tier as the floor; architecture, design, and the final
+whole-change review take the most capable. Reviewers scale with the diff's risk,
+not its existence.
 
 Turn count beats token price — the cheapest models routinely take 2-3× the turns on
 multi-step work and cost more overall.

@@ -1,6 +1,6 @@
 ---
 name: systematic-debugging
-description: Use when a defect remains unexplained after a literal search and local call-chain inspection, reproduces inconsistently, spans multiple components, or a focused fix attempt has failed.
+description: Trace an unexplained defect to a verified root cause before proposing a fix. Use once a literal search and local call-chain inspection have failed to explain the behavior — including when it reproduces inconsistently, spans multiple components, or a focused fix attempt has already failed.
 ---
 
 # Systematic Debugging

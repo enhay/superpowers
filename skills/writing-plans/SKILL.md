@@ -153,5 +153,5 @@ decomposition), and demands to enumerate every edge case.
 
 Return only a concise summary, the path, and the execution route. Use
 `subagent-driven-development` when tasks are independently implementable and the
-plan authorizes task-level commits; otherwise execute directly on the main line.
+plan authorizes task-level commits; otherwise execute it yourself, serially.
 If the user already asked to implement, start without asking them to choose again.

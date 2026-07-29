@@ -1,13 +1,13 @@
-# Implementer Subagent Prompt Template
+# Implementer Worker Prompt Template
 
-Use this template when dispatching an implementer subagent.
+Start a worker that does not inherit this conversation's history, by whatever
+mechanism the harness provides. Label it "Implement Task N: [task name]". If the
+harness lets you choose the worker's model, choose per SKILL.md Model Selection —
+an omitted model usually inherits the session's most expensive one.
+
+The block below is the worker's message. It is content, not a call signature:
 
 ```
-Subagent (general-purpose):
-  description: "Implement Task N: [task name]"
-  model: [MODEL — REQUIRED: choose per SKILL.md Model Selection; an omitted
-         model silently inherits the session's most expensive one]
-  prompt: |
     You are implementing Task N: [task name]
 
     ## Task Description

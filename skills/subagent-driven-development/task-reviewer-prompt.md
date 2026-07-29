@@ -1,18 +1,19 @@
 # Task Reviewer Prompt Template
 
-Use this template when dispatching a task reviewer subagent. The reviewer
-reads the task's diff once and returns two verdicts: spec compliance and
-code quality.
+**Use this only when the harness has no review capability of its own.** Where one
+exists, hand it the brief as its custom review instructions and the review package
+as its diff, let it use its own output contract, and adjudicate spec compliance
+yourself — a native reviewer reports defects in the code, not whether the task
+matched its brief.
 
-**Purpose:** Verify one task's implementation matches its requirements (nothing
-more, nothing less) and is well-built with proportionate evidence.
+Otherwise, start a worker that does not inherit this conversation's history,
+labelled "Review Task N (spec + quality)". If the harness lets you choose its
+model, choose per SKILL.md Model Selection. The reviewer reads the task's diff once
+and returns two verdicts: spec compliance and code quality.
+
+The block below is the worker's message. It is content, not a call signature:
 
 ```
-Subagent (general-purpose):
-  description: "Review Task N (spec + quality)"
-  model: [MODEL — REQUIRED: choose per SKILL.md Model Selection; an omitted
-         model silently inherits the session's most expensive one]
-  prompt: |
     You are reviewing one task's implementation: first whether it matches its
     requirements, then whether it is well-built. This is a task-scoped gate,
     not a merge review — a broad whole-branch review happens separately after
