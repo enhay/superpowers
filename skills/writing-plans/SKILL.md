@@ -35,7 +35,13 @@ plan's task list, file inventory, or acceptance.
 
 ## Before writing
 
-Inspect the real code, entrypoints, consumers, tests, and existing documents.
+Size the request first. If it describes several independent subsystems, say so
+before refining any of them — decomposition costs one exchange, while refining a
+request that has to be split wastes every question asked. Name the independent
+pieces, how they relate, and a build order, then plan only the first one; each
+later piece gets its own plan when its turn comes.
+
+Then inspect the real code, entrypoints, consumers, tests, and existing documents.
 Separate established requirements from assumptions. Ask one consolidated question
 only when the user must choose before a final contract can be stated; otherwise
 make the uncertainty the first bounded task and keep the plan live. Do not
@@ -132,8 +138,9 @@ invisible in a later diff:
    belong, instead of spreading them evenly.
 10. **Task independence** — hidden ordering, or two tasks editing one file.
 11. **Proportion** — too heavy for the problem is a finding, in both directions.
-12. **Implicit decisions** — business choices the plan made quietly: a threshold,
-    a default, a calibration.
+12. **Implicit decisions and ambiguity** — business choices the plan made quietly
+    (a threshold, a default, a calibration), and any requirement that can be read
+    two ways. Pick one reading and state it.
 
 Also confirm every acceptance condition maps to a task, interfaces and names are
 consistent, stale tasks are removed, and verification matches risk rather than
