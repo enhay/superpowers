@@ -122,17 +122,17 @@ The block below is the worker's message. It is content, not a call signature:
     **Verification:**
     - Does the reported evidence directly support the claimed outcome?
     - Is any consequential edge case left unsupported by code or evidence?
-    - If any test was written or changed, does every assertion anchor on one of
-      the four whitelisted values — pure function or selector return value, a
-      persisted or API field, an explicit `data-state`/`data-phase`/aria marker,
-      or an error/permission/result code? An assertion on text, CSS class, DOM
-      hierarchy, snapshot, element count, or bare existence is a finding, and
-      stays a finding when the plan's wording or a neighbouring existing test
-      used the same anchor. Absence assertions need a positive whitelisted
-      anchor alongside them.
+    - If any test was written or changed, every assertion must anchor on a
+      whitelisted value — pure function or selector return, persisted or API
+      field, explicit `data-state`/`data-phase`/aria, error/permission/result
+      code. The project's assertion rules govern the details, including what may
+      never be anchored and how absence assertions are handled. A violation is a
+      finding, and stays one when the plan's wording or a neighbouring existing
+      test used the same anchor.
     - A change with no valid anchor should have been downgraded to a screenshot
       or smoke check. An assertion invented to manufacture a red-green cycle is
-      a finding.
+      a finding. A test added where a later silent break would have surfaced
+      elsewhere anyway is over-testing — report it as Minor.
 
     **Structure:**
     - Does each file have one clear responsibility with a well-defined interface?

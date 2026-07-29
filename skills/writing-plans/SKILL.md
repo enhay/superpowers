@@ -82,7 +82,9 @@ verified code contracts, project rules, or a spec's binding decisions only.
 **Interfaces:** exact signatures, payload shapes, names, invariants in and out.
 **Deliverable:** the observable behavior completed by the task.
 **Implementation notes:** only what the implementer must not rediscover.
-**Verification:** smallest direct evidence that proves this task works.
+**Verification:** smallest direct evidence that proves this task works. Specify a
+test only when a later change would break the behavior silently AND that break
+would surface nowhere else; otherwise a one-time observation is the deliverable.
 **Commit boundary:** required if this plan will use subagent-driven-development.
 ```
 

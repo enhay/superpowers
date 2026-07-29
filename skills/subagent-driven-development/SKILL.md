@@ -22,8 +22,9 @@ when tasks are tightly coupled, execute the plan yourself, serially, in the curr
 checkout. Never push unless the user asks.
 
 Verification follows the plan and project rules: the smallest direct evidence that
-proves each deliverable, tests only when the plan or an enduring observable
-contract warrants them, TDD only when the user or a project rule requires it.
+proves each deliverable, and a test only where a later change would break the
+behavior silently and nothing else would catch it. TDD only when the user or a
+project rule requires it.
 
 **Narration:** at most one short line between tool calls — the ledger and tool
 results carry the record.
