@@ -194,24 +194,12 @@ Subagent (general-purpose):
     **Reasoning:** [1-2 sentence technical assessment]
 ```
 
-**Placeholders:**
-- `[MODEL]` — REQUIRED: reviewer model per SKILL.md Model Selection
-- `[BRIEF_FILE]` — REQUIRED: the task brief file (`scripts/task-brief PLAN N`
-  prints the path; same file the implementer worked from)
-- `[GLOBAL_CONSTRAINTS]` — the binding requirements copied verbatim from
-  the plan's Global Constraints section or the spec: exact values, formats,
-  and stated relationships between components (not process rules — those
-  are already in this template)
-- `[REPORT_FILE]` — REQUIRED: the file the implementer wrote its detailed
-  report to
-- `[BASE_SHA]` — commit before this task
-- `[HEAD_SHA]` — current commit
-- `[DIFF_FILE]` — REQUIRED: the path the controller wrote the review
-  package to (`scripts/review-package BASE HEAD` prints the unique path it
-  wrote; the package never enters the controller's context)
+**Placeholders** (all required except `[GLOBAL_CONSTRAINTS]`):
+`[MODEL]` per SKILL.md; `[BRIEF_FILE]` and `[DIFF_FILE]` from `scripts/task-brief`
+and `scripts/review-package`; `[REPORT_FILE]` the implementer's report;
+`[BASE_SHA]`/`[HEAD_SHA]` the recorded task range; `[GLOBAL_CONSTRAINTS]` the
+binding requirements copied verbatim from the plan — exact values, formats, and
+stated relationships between components, not process rules.
 
-**Reviewer returns:** Spec Compliance verdict (✅/❌/⚠️), Strengths, Issues
-(Critical/Important/Minor), Task quality verdict
-
-A fix dispatch can address spec gaps and quality findings together;
-re-review after fixes covers both verdicts.
+A fix dispatch can address spec gaps and quality findings together; the re-review
+covers both verdicts.

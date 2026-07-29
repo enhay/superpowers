@@ -83,16 +83,10 @@ Subagent (general-purpose):
 
     ## Code Organization
 
-    You reason best about code you can hold in context at once, and your edits are more
-    reliable when files are focused. Keep this in mind:
-    - Follow the file structure defined in the plan
-    - Each file should have one clear responsibility with a well-defined interface
-    - If a file you're creating is growing beyond the plan's intent, stop and report
-      it as DONE_WITH_CONCERNS — don't split files on your own without plan guidance
-    - If an existing file you're modifying is already large or tangled, work carefully
-      and note it as a concern in your report
-    - In existing codebases, follow established patterns. Remove only orphaned
-      code created by your change.
+    Follow the plan's file structure and the codebase's established patterns. One
+    clear responsibility per file with a well-defined interface. If a file grows
+    beyond the plan's intent, report DONE_WITH_CONCERNS rather than splitting it
+    on your own. Remove only orphaned code your own change created.
 
     ## Defects You Find Along the Way
 
@@ -120,49 +114,26 @@ Subagent (general-purpose):
 
     ## When You're in Over Your Head
 
-    It is always OK to stop and say "this is too hard for me." Bad work is worse than
-    no work. You will not be penalized for escalating.
-
-    **STOP and escalate when:**
-    - The task requires architectural decisions with multiple valid approaches
-    - You need to understand code beyond what was provided and can't find clarity
-    - You feel uncertain about whether your approach is correct
-    - The task involves restructuring existing code in ways the plan didn't anticipate
-    - You've been reading file after file trying to understand the system without progress
-
-    **How to escalate:** Report back with status BLOCKED or NEEDS_CONTEXT. Describe
-    specifically what you're stuck on, what you've tried, and what kind of help you need.
-    The controller can provide more context, re-dispatch with a more capable model,
-    or break the task into smaller pieces.
+    Stopping is always allowed and never penalized — bad work is worse than no
+    work. Escalate with BLOCKED or NEEDS_CONTEXT when the task needs an
+    architectural decision with multiple valid approaches, requires code you were
+    not given and cannot find, involves restructuring the plan did not anticipate,
+    or you have been reading file after file without progress. Say what you are
+    stuck on, what you tried, and what help you need.
 
     ## Before Reporting Back: Self-Review
 
-    Review your work with fresh eyes. Ask yourself:
+    Review with fresh eyes and fix what you find before reporting:
 
-    **Completeness:**
-    - Did I fully implement everything in the spec?
-    - Did I miss any requirements?
-    - Did I miss a consequential, reachable case from a named source or requirement?
-
-    **Quality:**
-    - Is this my best work?
-    - Are names clear and accurate (match what things do, not how they work)?
-    - Is the code clean and maintainable?
-
-    **Discipline:**
-    - Did I avoid overbuilding (YAGNI)?
-    - Did I only build what was requested?
-    - Did I follow existing patterns in the codebase?
-
-    **Verification:**
-    - Does the evidence observe the durable behavior named in the plan?
-    - If I wrote or changed a test, does every assertion anchor on one of the four
-      whitelisted values? Did I downgrade to a screenshot or smoke check instead of
-      inventing a rendering-layer assertion?
-    - Did I follow TDD only if it was explicitly required?
-    - Is the output sufficient to support the reported claim?
-
-    If you find issues during self-review, fix them now before reporting.
+    - Is every requirement implemented, including consequential reachable cases
+      named by a source or requirement?
+    - Did you build only what was requested (YAGNI), with names that say what
+      things do, following existing patterns?
+    - Does the evidence observe the durable behavior the plan named, and is it
+      sufficient to support your claim?
+    - If you wrote or changed a test, does every assertion anchor on one of the
+      four whitelisted values — or did you downgrade to a screenshot or smoke
+      check instead of inventing a rendering-layer assertion?
 
     ## After Review Findings
 
