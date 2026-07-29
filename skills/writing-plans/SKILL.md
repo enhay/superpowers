@@ -182,7 +182,11 @@ in a later diff:
    judged not worth keeping?
 4. **Boundaries and contracts.** Ownership of data, who calls whom, the final
    interface shapes, and which external or independently released callers
-   cannot change in the coordinated release.
+   cannot change in the coordinated release. Do not turn a representable but
+   unsupported state into a contract obligation. A proposed boundary,
+   validation rule, failure behavior, or compatibility path must be justified
+   by both a reachable source and a consequential outcome; otherwise preserve
+   the established invariant instead of specifying hypothetical behavior.
 5. **Data semantics.** Denominators, time windows, join keys, and exclusions
    pinned exactly. Wrong calibration produces wrong numbers that pass every
    test.

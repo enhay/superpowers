@@ -142,7 +142,7 @@ Subagent (general-purpose):
     **Completeness:**
     - Did I fully implement everything in the spec?
     - Did I miss any requirements?
-    - Are there edge cases I didn't handle?
+    - Did I miss a consequential, reachable case from a named source or requirement?
 
     **Quality:**
     - Is this my best work?
