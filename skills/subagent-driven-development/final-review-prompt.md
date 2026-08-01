@@ -16,9 +16,9 @@ review". This pass is worth the most capable model available.
 The block below is the worker's message. It is content, not a call signature:
 
 ```
-    You are reviewing a complete change against the plan it was built from.
-    Every task has already passed its own review; you are not repeating those.
-    Judge what only the whole change shows.
+    You are reviewing a complete change against its intended outcome. The plan
+    defines that outcome and its binding decisions; the assembled code and diff
+    are the implementation evidence. Judge what only the whole change shows.
 
     ## What Was Planned
 
@@ -57,9 +57,9 @@ The block below is the worker's message. It is content, not a call signature:
        payload shapes, field names, error codes and deploy order between
        producer and consumer. Name the deploy order the change requires and say
        whether the diff is safe in that order.
-    5. **Minor findings deferred during the run:** [MINOR_FINDINGS]. Say for
-       each whether the assembled change makes it consequential. A roll-up
-       nobody reads is a silent discard.
+    5. **Material findings explicitly deferred during the run:**
+       [DEFERRED_FINDINGS_OR_NONE]. Say for each whether the assembled change
+       makes it consequential. Do not invent a roll-up from routine review notes.
     6. **What the change leaves behind** — a compatibility path with no exit,
        a migration that reaches a half-state, dead code the change orphaned,
        a guard removed whose trigger you can still reach.
@@ -101,6 +101,6 @@ The block below is the worker's message. It is content, not a call signature:
 committed ranges or uncommitted workspace scope represented by the artifacts;
 `[DIFF_FILES]` the matching paths, produced by the harness or by
 `scripts/review-package -C REPO MERGE_BASE HEAD` when commits exist;
-`[MINOR_FINDINGS]` the Minor
-items the ledger accumulated across tasks, which nothing else will revisit;
+`[DEFERRED_FINDINGS_OR_NONE]` only material findings the controller intentionally
+carried forward, or `none`;
 `[REVIEW_FILE]` where the full report is written.

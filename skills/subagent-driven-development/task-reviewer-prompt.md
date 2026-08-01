@@ -1,15 +1,14 @@
 # Task Reviewer Prompt Template
 
 **Use this only when the harness has no review capability of its own.** Where one
-exists, hand it the brief as its custom review instructions and the review package
-as its diff, let it use its own output contract, and adjudicate spec compliance
-yourself — a native reviewer reports defects in the code, not whether the task
-matched its brief.
+exists, give it the assigned outcome and honest diff scope, let it use its own
+output contract, and adjudicate outcome compliance yourself. A native reviewer
+reports defects in the code; it does not own product intent.
 
 Otherwise, start a worker that does not inherit this conversation's history,
-labelled "Review Task N (spec + quality)". If the harness lets you choose its
+labelled "Review Task N (outcome + quality)". If the harness lets you choose its
 model, choose per SKILL.md Model Selection. The reviewer reads the task's diff once
-and returns two verdicts: spec compliance and code quality.
+and returns two verdicts: outcome compliance and code quality.
 
 The block below is the worker's message. It is content, not a call signature:
 
@@ -21,11 +20,14 @@ The block below is the worker's message. It is content, not a call signature:
 
     ## What Was Requested
 
-    Read the task brief: [BRIEF_FILE]
+    Read the plan: [PLAN_FILE]. The assigned outcome is [OUTCOME], within
+    [OWNERSHIP]. The binding decisions relevant to this slice are
+    [BINDING_DECISIONS]. Check their exact values in the plan; `none` means the
+    slice is governed only by its outcome, scope, and acceptance.
 
-    Then read the plan: [PLAN_FILE]. The binding decisions relevant to this
-    slice are [BINDING_DECISIONS]. Check their exact values in the plan; `none`
-    means the slice is governed only by its outcome, scope, and acceptance.
+    Read [BRIEF_FILE_OR_NONE] only when a separate handoff brief was provided. It
+    does not turn internal path hints, task splits, or suggested mechanisms into
+    requirements.
 
     Judge this diff against this task only. Later tasks in the plan are context
     for one question — will the interfaces this task leaves behind serve them —
@@ -34,7 +36,8 @@ The block below is the worker's message. It is content, not a call signature:
 
     ## What the Implementer Claims They Built
 
-    Read the implementer's report: [REPORT_FILE]
+    Read [REPORT_FILE_OR_NONE] only when the implementer produced a separate
+    report. Treat it as unverified claims; the code and diff are the evidence.
 
     ## Diff Under Review
 
@@ -102,9 +105,9 @@ The block below is the worker's message. It is content, not a call signature:
 
     Return per finding: resolved | not resolved | resolved differently than
     recommended (with what was done instead), plus any new defect in the fix
-    itself. Skip the spec-compliance verdict entirely.
+    itself. Skip the outcome-compliance verdict entirely.
 
-    ## Part 1: Spec Compliance
+    ## Part 1: Outcome Compliance
 
     Compare the diff against What Was Requested:
 
@@ -181,7 +184,7 @@ The block below is the worker's message. It is content, not a call signature:
     preamble, no process narration, no closing summary.
 
     Then return ONLY:
-    - **Spec compliance:** ✅ | ❌   **Task quality:** Approved | Needs fixes
+    - **Outcome compliance:** ✅ | ❌   **Task quality:** Approved | Needs fixes
     - Counts by severity, and each ⚠️ cannot-verify item in one line
     - One line per Critical/Important finding: `file:line — what is wrong`.
       No rationale, no fix instructions; they are in the file. Minor findings
@@ -199,10 +202,10 @@ The block below is the worker's message. It is content, not a call signature:
     would block a merge over — verbatim duplication of a logic block,
     swallowed errors, tests that assert nothing. "Coverage could be broader"
     and polish suggestions are Minor.
-    If the plan or brief explicitly mandates something this rubric calls a
+    If the accepted outcome or a binding decision mandates something this rubric calls a
     defect (a test that asserts nothing, verbatim duplication of a logic
     block), that IS a finding — report it as Important, labeled
-    plan-mandated. The plan's authorship does not grade its own work; the
+    requirement-mandated. The plan's authorship does not grade its own work; the
     human decides.
     Do not add generic praise or filler. Mention a strength only when it is
     evidence for the approval verdict or helps distinguish a deliberate,
@@ -210,9 +213,9 @@ The block below is the worker's message. It is content, not a call signature:
 
     ## Output Format
 
-    ### Spec Compliance
+    ### Outcome Compliance
 
-    - ✅ Spec compliant | ❌ Issues found: [what's missing/extra/misunderstood,
+    - ✅ Outcome met | ❌ Issues found: [what's missing/extra/misunderstood,
       with file:line references]
     - ⚠️ Cannot verify from diff: [requirements you could not verify from the
       diff alone, and what the controller should check — report alongside the
@@ -234,21 +237,16 @@ The block below is the worker's message. It is content, not a call signature:
     **Reasoning:** [1-2 sentence technical assessment]
 ```
 
-**Placeholders:** all are required for a normal review except
-`[BINDING_DECISIONS]`, which may be `none`; `[PRIOR_REVIEW_FILE]` is required only
-for a fix re-review.
-`[MODEL]` per SKILL.md; `[BRIEF_FILE]` from `scripts/task-brief`; `[PLAN_FILE]` the plan's path; `[REPORT_FILE]` the
-implementer's report; `[CHANGE_SCOPE]` the honest committed, uncommitted, or
-combined scope represented by the artifacts; `[DIFF_FILES]` the matching diff
-artifact paths;
+**Placeholders:** `[PLAN_FILE]` the plan path; `[OUTCOME]` the assigned result;
+`[OWNERSHIP]` the responsibility boundary; `[BINDING_DECISIONS]` relevant IDs or
+`none`; `[BRIEF_FILE_OR_NONE]` and `[REPORT_FILE_OR_NONE]` optional handoff files;
+`[CHANGE_SCOPE]` the honest committed, uncommitted, or combined scope;
+`[DIFF_FILES]` the matching diff artifacts;
 `[PRIOR_REVIEW_FILE]` on a fix re-review, the review whose findings were fixed;
-`[REVIEW_FILE]` where the full report is written, named after the brief
-(`task-N-brief.md` → `task-N-review.md`) for the first review and with a fresh
-round suffix for re-reviews (`task-N-review-round-2.md`). It must never overwrite
-`[PRIOR_REVIEW_FILE]`;
-`[BINDING_DECISIONS]` the decision IDs that bind this slice, or `none` — IDs, not
-their text. Pasting their text costs controller context and lets the reviewer's
-copy drift from the one the implementer read.
+`[REVIEW_FILE]` where the full report is written, with a fresh round suffix for
+re-reviews. It must never overwrite `[PRIOR_REVIEW_FILE]`;
+Use binding-decision IDs, not their text. Pasting their text costs controller
+context and lets the reviewer's copy drift from the one the implementer read.
 
-A fix dispatch can address spec gaps and quality findings together; the re-review
+A fix dispatch can address outcome gaps and quality findings together; the re-review
 covers both verdicts.

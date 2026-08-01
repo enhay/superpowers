@@ -12,24 +12,28 @@ The block below is the worker's message. It is content, not a call signature:
 
     ## Task Description
 
-    Read your task brief first: [BRIEF_FILE]
-    It contains the outcome and responsibility boundary selected for this
-    dispatch.
+    Read the plan: [PLAN_FILE]. It defines the intended goal, acceptance, binding
+    decisions, and durable public or cross-slice contracts. Your assigned outcome
+    is [OUTCOME], within [OWNERSHIP]. Relevant binding decisions:
+    [BINDING_DECISIONS].
 
-    Then the plan itself: [PLAN_FILE]. Its goal, acceptance, binding decisions,
-    and public or cross-slice contracts are authoritative. Internal file names,
-    signatures, and path hints are implementation context unless the plan states
-    why they are binding. Verify them against the current code instead of treating
-    the plan as a line-by-line recipe.
+    Read [BRIEF_FILE_OR_NONE] only when a separate brief was provided. It is a
+    handoff aid, not another source of requirements.
+
+    Then inspect the current code, schema, configuration, and recent git history.
+    They define the implemented state and prior committed progress. Internal file
+    names, signatures, path hints, and task splits in the plan are context unless
+    the plan states why they are binding. Do not treat the plan as a line-by-line
+    recipe or make the code resemble it mechanically.
 
     Implement the assigned outcome and nothing beyond its responsibility. Later
     tasks are context for real contracts and dependencies, never work to pull
     forward.
 
-    Finally the progress ledger: [LEDGER_FILE] — what earlier tasks actually
-    produced, which is not always what the plan described. For an interface that
-    already exists the ledger and the code are authoritative and the plan is
-    intent: build against what is there, and report that the two disagree.
+    If [LEDGER_FILE_OR_NONE] names a ledger, read it only for uncommitted temporary
+    facts that are not visible in the diff. For an existing interface, build from
+    the code and git history. Report any disagreement that changes accepted
+    behavior, business semantics, data, permissions, or a durable contract.
 
     ## Context
 
@@ -48,9 +52,8 @@ The block below is the worker's message. It is content, not a call signature:
     ## Your Job
 
     The plan stops at the decision and responsibility boundary on purpose. Choose
-    the local implementation after reading the code. For a non-trivial slice,
-    record a short implementation outline in the report; do not mirror the plan
-    into a second detailed checklist.
+    the local implementation after reading the code. Do not mirror the plan into
+    a second checklist.
 
     Then:
     1. Implement the requested outcome within the assigned scope
@@ -65,7 +68,7 @@ The block below is the worker's message. It is content, not a call signature:
        [ACTION_PERMISSIONS] names that action. The plan does not grant that
        authority by itself; return NEEDS_CONTEXT if the outcome requires it
     5. Self-review (see below)
-    6. Report back once
+    6. Report back once, concisely
 
     Work from: [directory]
 
@@ -202,34 +205,29 @@ The block below is the worker's message. It is content, not a call signature:
     defect in another layer is not a fix.
 
     Re-run the smallest focused verification covering the amended outcome.
-    **Append** under a `## Fix round N` heading in the existing report; never
-    rewrite it or start a new file — the original is the reviewer's record of
-    what was claimed. Same short status format, listing which findings you
-    resolved and any you did not, with the reason.
+    If a report file was provided, append under a `## Fix round N` heading rather
+    than overwriting the findings being resolved. Otherwise report the fix result
+    directly.
 
     ## Report Format
 
-    Write your full report to [REPORT_FILE]:
-    - A short implementation outline for a non-trivial slice, plus what completed
-    - What you implemented (or what you attempted, if blocked)
-    - What you verified and the observed results
-    - **TDD Evidence** (if TDD was required for this task):
-      - RED: command run, relevant failing output before implementation, and why the failure was expected
-      - GREEN: command run and relevant passing output after implementation
-    - Files changed
-    - **Open choices you settled yourself** — what the task left open and what
-      you decided, one line each, or `none`
-    - Self-review findings (if any)
-    - Any issues or concerns
+    If [REPORT_FILE_OR_NONE] names a file, write detail there only because another
+    worker needs it or the evidence is too large for the controller response.
+    Otherwise return the result directly. Include:
 
-    Then report back with ONLY (under 15 lines — the detail lives in the
-    report file):
-    - **Status:** DONE | DONE_WITH_CONCERNS | BLOCKED | NEEDS_CONTEXT
+    - What outcome completed, or what blocked it
+    - What you verified and the observed result
+    - TDD evidence only when TDD was explicitly required
+    - Any durable concern or decision the controller must resolve
     - Commits created (short SHA + subject), or why the slice stayed uncommitted
+
+    Keep routine file lists, open local choices, and implementation narration out
+    unless they explain a concern. Report:
+    - **Status:** DONE | DONE_WITH_CONCERNS | BLOCKED | NEEDS_CONTEXT
     - One-line verification summary (for example, focused test, typecheck,
       build, smoke run, browser check, or direct reproduction)
     - Your concerns, if any
-    - The report file path
+    - The report file path, only when one was used
 
     If BLOCKED or NEEDS_CONTEXT, put the specifics in the final message
     itself — the controller acts on it directly.
@@ -239,11 +237,12 @@ The block below is the worker's message. It is content, not a call signature:
     information that wasn't provided. Never silently produce work you're unsure about.
 ```
 
-**Placeholders:** `[BRIEF_FILE]` from `scripts/task-brief`; `[PLAN_FILE]` the
-plan's path; `[LEDGER_FILE]` from `scripts/sdd-workspace --ledger`;
-`[REPORT_FILE]` named after the brief (`task-N-brief.md` → `task-N-report.md`);
-`[ACTION_PERMISSIONS]` the outbound and shared-state actions the controller
-allows — push, deploy, migration, production write — with unlisted ones denied;
-local commits need no entry; `[FINDINGS_FILE]` the prior review on a fix
-dispatch, otherwise `none`;
+**Placeholders:** `[PLAN_FILE]` the plan path; `[OUTCOME]` the coherent result;
+`[OWNERSHIP]` the responsibility boundary; `[BINDING_DECISIONS]` relevant IDs or
+`none`; `[BRIEF_FILE_OR_NONE]` an optional `scripts/task-brief` output;
+`[LEDGER_FILE_OR_NONE]` an optional uncommitted-state ledger;
+`[REPORT_FILE_OR_NONE]` an optional long-form handoff file; `[ACTION_PERMISSIONS]`
+the outbound and shared-state actions the controller allows — push, deploy,
+migration, production write — with unlisted ones denied; local commits need no
+entry; `[FINDINGS_FILE]` the prior review on a fix dispatch, otherwise `none`;
 `[directory]` the working tree the worker runs in.

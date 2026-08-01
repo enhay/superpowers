@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Resolve and ensure the locations SDD uses for its short-lived artifacts.
+# Resolve and ensure the optional locations SDD uses for handoff artifacts.
 # Print an absolute path.
 #
-#   sdd-workspace                    → workspace directory for task briefs,
-#                                      implementer reports, review packages and
+#   sdd-workspace                    → workspace directory for optional task
+#                                      briefs, reports, review packages and
 #                                      review reports.
 #   sdd-workspace --ledger PLAN_FILE → progress ledger for that plan.
 #
@@ -20,14 +20,13 @@
 #
 # The ledger is written only by the controller, so that restriction does not
 # apply to it, and it lives under the git directory instead — where `git clean
-# -fdx` cannot reach it. Losing the ledger mid-execution is what makes a
-# controller re-dispatch completed tasks. Its first line names the plan and the
-# plan's revision; a ledger belonging to a different plan is rotated aside
-# rather than appended to, so one worktree can run several plans over time
-# without a stale entry being read as current progress.
+# -fdx` cannot reach it. It is a fallback for uncommitted execution-window facts,
+# not a second completion record: committed progress is recovered from `git log`.
+# Its first line names the plan and its starting revision; a ledger belonging to
+# a different plan is rotated aside rather than appended to.
 #
-# Single source of truth for both locations, so task-brief, review-package and
-# the controller cannot drift.
+# Resolve both locations from the same repository so optional handoff artifacts
+# and the controller cannot drift.
 #
 # Usage: sdd-workspace [--ledger PLAN_FILE]
 set -euo pipefail

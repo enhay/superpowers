@@ -47,8 +47,8 @@ else
   if [ "$(cd "$(git -C "$repo" rev-parse --show-toplevel)" && pwd)" != "$(cd "$dir/../.." && pwd)" ] \
      && [ -z "${SDD_HOME-}" ]; then
     echo "review-package: WARNING — diffing ${name} but writing into $(cd "$dir/../.." && basename "$(pwd)")." >&2
-    echo "  Set SDD_HOME to the task's primary repository so briefs, reports, packages" >&2
-    echo "  and the ledger all land in one place." >&2
+    echo "  Set SDD_HOME to the task's primary repository so optional handoff" >&2
+    echo "  artifacts land in one place." >&2
   fi
   out="$dir/review-${name}-$(git -C "$repo" rev-parse --short "$base")..$(git -C "$repo" rev-parse --short "$head").diff"
 fi
