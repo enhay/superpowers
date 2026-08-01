@@ -37,7 +37,8 @@ Branch: `local/v6.1.1`
   handoff artifacts.
 - `subagent-driven-development` delegates only when a bounded outcome benefits
   from fresh context or the user asks. Workers inspect code, implement, verify,
-  and commit by default; the controller judges the actual diff and acceptance.
+  and commit by default. Worker and reviewer rubrics are conditional on the
+  actual change; the controller judges the actual diff and acceptance.
   Shared-workspace workers run sequentially, and independent review scales with
   risk. The controller's active todo/checklist tracks execution; `git log` records
   committed outcomes and is read only for a targeted history question. Briefs,
@@ -47,7 +48,7 @@ Branch: `local/v6.1.1`
   the assertion whitelist, three-tier defect rule, and named-trigger rule for
   speculative robustness.
 - Concurrency hardening, mixed-version compatibility, and staged rollout require a
-  named real-world trigger rather than hypothetical scale.
+  named real-world trigger and material consequence rather than hypothetical scale.
 
 ## Updating
 

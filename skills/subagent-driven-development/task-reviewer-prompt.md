@@ -29,10 +29,11 @@ The block below is the worker's message. It is content, not a call signature:
     does not turn internal path hints, task splits, or suggested mechanisms into
     requirements.
 
-    Judge this diff against this task only. Later tasks in the plan are context
-    for one question — will the interfaces this task leaves behind serve them —
-    and are never requirements for this diff. Something the plan assigns to a
-    later task is not missing here.
+    Judge this diff against this task's outcome first. Treat later quality sections
+    as conditional filters, not a completeness checklist; apply one only when the
+    diff exposes a named consequence for the outcome or a binding decision, or
+    concrete material maintenance damage. Later tasks are context only for whether
+    this task's interfaces serve them, never requirements for this diff.
 
     ## What the Implementer Claims They Built
 
@@ -132,7 +133,7 @@ The block below is the worker's message. It is content, not a call signature:
 
     ## Part 2: Code Quality
 
-    **Code quality:**
+    **Code quality — only for a changed path with a named consequence:**
     - Clean separation of concerns?
     - DRY without premature abstraction?
     - Is error behavior wrong on a path you can trace to a real caller?
@@ -141,11 +142,12 @@ The block below is the worker's message. It is content, not a call signature:
 
     **Speculative robustness (both directions):**
     - A concurrency, atomicity, race, retry, timeout, null-safety or input-
-      validation finding requires a named trigger: which two call sites contend
-      and under what deployment shape, which real caller supplies the value,
-      which trust boundary the untrusted input crosses. Most paths here have one
-      writer. "A caller could", "under load", "to be safe" is not a trigger —
-      without one, do not report it at any severity.
+      validation finding requires both a named trigger and a material consequence:
+      which two call sites contend and under what deployment shape, which real
+      caller supplies the value, which trust boundary the untrusted input crosses,
+      and how that changes acceptance or binding behavior. Most paths here have
+      one writer. "A caller could", "under load", or "to be safe" is neither —
+      without both, do not report it at any severity.
     - Conversely, a lock, retry, fallback, defensive null guard, or catch-all
       added for a condition you cannot trace to a real caller IS a finding.
       Report it as unnecessary defensive code and recommend removing it.
@@ -165,7 +167,7 @@ The block below is the worker's message. It is content, not a call signature:
       a finding. A test added where a later silent break would have surfaced
       elsewhere anyway is over-testing — report it as Minor.
 
-    **Structure:**
+    **Structure — only when the diff introduces material damage:**
     - Does each file have one clear responsibility with a well-defined interface?
     - Are units decomposed so they can be understood and tested independently?
     - Does the implementation respect the plan's responsibility boundaries and

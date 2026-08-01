@@ -18,7 +18,8 @@ The block below is the worker's message. It is content, not a call signature:
 ```
     You are reviewing a complete change against its intended outcome. The plan
     defines that outcome and its binding decisions; the assembled code and diff
-    are the implementation evidence. Judge what only the whole change shows.
+    are the implementation evidence. Judge only what the whole change shows;
+    later categories are conditional tests, not a checklist to complete.
 
     ## What Was Planned
 
@@ -70,9 +71,10 @@ The block below is the worker's message. It is content, not a call signature:
 
     ## Evidence Discipline
 
-    A finding names its trigger: a real call site, a reachable input, a
-    deployment order, a named acceptance condition. "A caller could", "under
-    load", or "to be safe" is not a trigger. Inspect code outside the diff only
+    A finding names both its trigger and material consequence: a real call site,
+    reachable input, deployment order, or named acceptance condition, plus how it
+    changes the accepted outcome or a binding decision. "A caller could", "under
+    load", or "to be safe" supplies neither. Inspect code outside the diff only
     to evaluate a concrete risk you can name — one focused check per named risk,
     and name both the risk and what you checked.
 

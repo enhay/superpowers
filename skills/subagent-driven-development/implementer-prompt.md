@@ -30,7 +30,9 @@ The block below is the worker's message. It is content, not a call signature:
 
     Implement the assigned outcome and nothing beyond its responsibility. Later
     tasks are context for real contracts and dependencies, never work to pull
-    forward.
+    forward. Treat later rubrics as conditional filters, not extra requirements;
+    apply one only when changed code exposes a named consequence for the outcome,
+    acceptance, or a binding decision.
 
     If [LEDGER_FILE_OR_NONE] names a ledger, read it only for uncommitted temporary
     facts that are not visible in the diff. For an existing interface, build from
@@ -87,7 +89,7 @@ The block below is the worker's message. It is content, not a call signature:
     While iterating, run the focused verification for what you're changing.
     Run a broader suite only when the plan or project rules require it.
 
-    ## Assertion Discipline
+    ## If You Change Tests: Assertion Discipline
 
     If you write or change a test, it may anchor on ONLY these four kinds of
     value (default-deny whitelist):
@@ -122,11 +124,11 @@ The block below is the worker's message. It is content, not a call signature:
     assigned ownership boundary or changing a public contract, data semantics,
     permissions, or migration shape.
 
-    Removal is part of your mandate, not only addition. Remove orphaned code your
-    own change created. You may also remove a lock, retry, fallback, null guard or
-    catch-all on your path that your change makes unreachable — but that
-    conclusion needs more than the call sites you happened to read. First search
-    for and report each of:
+    Remove orphaned code your own change created. Do not search for unrelated
+    removal opportunities. If the actual work makes an existing lock, retry,
+    fallback, null guard or catch-all on your path unreachable and you intend to
+    remove it, that conclusion needs more than the call sites you happened to
+    read. First search for and report each of:
 
     - literal references to the symbol, and to the file path;
     - string and configuration registration — YAML, env, JSON, DI container,
@@ -150,7 +152,7 @@ The block below is the worker's message. It is content, not a call signature:
 
     Never extends to guards outside your path or pre-existing dead code.
 
-    ## Defects You Find Along the Way
+    ## If You Notice Another Defect on the Active Path
 
     Sort what you notice into three tiers:
 
@@ -189,8 +191,9 @@ The block below is the worker's message. It is content, not a call signature:
 
     - Is every requirement implemented, including consequential reachable cases
       named by a source or requirement?
-    - Did you build only what was requested (YAGNI), with names that say what
-      things do, following existing patterns?
+    - Did you build only what was requested (YAGNI), or did a conditional rubric
+      create work without a named consequence for the accepted outcome or a
+      binding decision?
     - Does the evidence observe the durable behavior the plan named, and is it
       sufficient to support your claim?
     - If you wrote or changed a test, does every assertion anchor on one of the

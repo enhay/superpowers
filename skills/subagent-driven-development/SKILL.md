@@ -23,6 +23,10 @@ in accepted behavior, business semantics, data, permissions, public contracts, o
 irreversible effects goes to the controller for a decision about the code, the
 plan premise, or the intended result.
 
+Keep accepted outcomes and binding business facts ahead of local rubrics. Apply a
+rubric only when the actual change activates it and its named consequence affects
+those facts; do not hunt for cases to make a rubric applicable.
+
 ## Choose the route
 
 Use the main agent for trivial, tightly coupled, or low-risk work. Delegate when a
@@ -113,10 +117,11 @@ Use the smallest evidence that observes the accepted outcome. Make a lasting tes
 when a future change could silently break the behavior and no other project signal
 would expose it. Use TDD when the user or project requires it.
 
-Require a concrete reachable trigger for locks, retries, fallbacks, checkpoints,
-idempotency, permission checks, and financial safeguards. Before removing an
-exported or dynamically wired path, inspect literal uses, configuration and
-string registration, router/boot wiring, jobs and consumers, and external callers.
+Require a concrete reachable trigger and material consequence for locks, retries,
+fallbacks, checkpoints, idempotency, permission checks, and financial safeguards.
+Before removing an exported or dynamically wired path, inspect literal uses,
+configuration and string registration, router/boot wiring, jobs and consumers,
+and external callers.
 
 ## Model selection
 

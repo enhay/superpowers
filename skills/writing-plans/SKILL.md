@@ -136,14 +136,15 @@ survives.
 
 ## Review
 
-Review the decision boundary and the reader's understanding:
+Review in order: core need and acceptance set priority; later checks are
+conditional filters, not categories the plan must fill.
 
 1. Does the core need deliver the valuable result at a proportionate cost?
 2. Are load-bearing premises verified or clearly bounded?
 3. Does every acceptance condition have an observable success and failure result?
 4. Are business, data, permission, public-contract, and migration semantics exact?
 5. Does each resilience, compatibility, rollout, or concurrency mechanism have a
-   concrete trigger in the observed system?
+   concrete trigger and material consequence in the observed system?
 6. Are irreversible points, approvals, ownership, and real dependencies clear?
 7. Can a reader outside the conversation understand the problem, outcome, and
    chosen approach?
