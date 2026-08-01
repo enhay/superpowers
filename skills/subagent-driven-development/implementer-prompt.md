@@ -20,11 +20,13 @@ The block below is the worker's message. It is content, not a call signature:
     Read [BRIEF_FILE_OR_NONE] only when a separate brief was provided. It is a
     handoff aid, not another source of requirements.
 
-    Then inspect the current code, schema, configuration, and recent git history.
-    They define the implemented state and prior committed progress. Internal file
-    names, signatures, path hints, and task splits in the plan are context unless
-    the plan states why they are binding. Do not treat the plan as a line-by-line
-    recipe or make the code resemble it mechanically.
+    Then inspect the current code, schema, and configuration. Read targeted git
+    history only when the slice depends on a prior commit, an existing interface's
+    provenance, a baseline, or recovery from earlier execution. Code and the
+    current diff define the implemented state. Internal file names, signatures,
+    path hints, and task splits in the plan are context unless the plan states why
+    they are binding. Do not treat the plan as a line-by-line recipe or make the
+    code resemble it mechanically.
 
     Implement the assigned outcome and nothing beyond its responsibility. Later
     tasks are context for real contracts and dependencies, never work to pull
@@ -32,8 +34,9 @@ The block below is the worker's message. It is content, not a call signature:
 
     If [LEDGER_FILE_OR_NONE] names a ledger, read it only for uncommitted temporary
     facts that are not visible in the diff. For an existing interface, build from
-    the code and git history. Report any disagreement that changes accepted
-    behavior, business semantics, data, permissions, or a durable contract.
+    the code and read only the relevant history when provenance matters. Report
+    any disagreement that changes accepted behavior, business semantics, data,
+    permissions, or a durable contract.
 
     ## Context
 

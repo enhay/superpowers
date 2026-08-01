@@ -31,21 +31,21 @@ Branch: `local/v6.1.1`
   spec then plans only when multiple independent plans share durable decisions or
   the user asks. A plan is the baseline product requirement and technical
   proposal: it binds outcomes, semantics, contracts, and irreversible choices,
-  while code and runtime evidence describe the current system. It is not an
-  as-built inventory or execution log. Update it only when goal, acceptance,
-  durable decisions, contracts, real dependencies, or load-bearing premises
-  change; do not write progress, review verdicts, task splits, or reversible
-  implementation details back into it.
+  while code and runtime evidence describe the current system. Plan changes follow
+  goal, acceptance, durable decision, contract, dependency, and load-bearing
+  premise changes; execution details stay with code, git, runtime evidence, or
+  handoff artifacts.
 - `subagent-driven-development` delegates only when a bounded outcome benefits
   from fresh context or the user asks. Workers inspect code, implement, verify,
   and commit by default; the controller judges the actual diff and acceptance.
   Shared-workspace workers run sequentially, and independent review scales with
-  risk. `git log` is the primary progress record. Briefs, reports, review
-  packages, and the ledger are optional handoff tools; the ledger is only for
-  uncommitted facts that the diff cannot recover. Push, deploy, migration and
-  production writes still need explicit authority. Prompts retain the assertion
-  whitelist, three-tier defect rule, and named-trigger rule for speculative
-  robustness.
+  risk. The controller's active todo/checklist tracks execution; `git log` records
+  committed outcomes and is read only for a targeted history question. Briefs,
+  reports, review packages, and the ledger are optional handoff tools; the ledger
+  is only for uncommitted facts that the diff cannot recover. Push, deploy,
+  migration and production writes still need explicit authority. Prompts retain
+  the assertion whitelist, three-tier defect rule, and named-trigger rule for
+  speculative robustness.
 - Concurrency hardening, mixed-version compatibility, and staged rollout require a
   named real-world trigger rather than hypothetical scale.
 
