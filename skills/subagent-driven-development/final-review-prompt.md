@@ -1,8 +1,11 @@
 # Final Whole-Change Review Prompt Template
 
-**Use this only when the harness has no review capability of its own.** Where one
-exists, hand it the branch package as its diff and the plan as its custom review
-instructions, and let it use its own output contract.
+**Prefer this template.** Use a native review capability only when it accepts
+custom review instructions, and then hand it the branch package as its diff and
+the plan plus the Evidence Discipline section below as those instructions. The
+plan alone is not enough: a default review rubric rewards thoroughness and will
+return speculative findings the plan never asked about. Where the harness cannot
+take custom instructions, use this template.
 
 This is not [task-reviewer-prompt.md](task-reviewer-prompt.md). That template
 opens by declaring itself a task-scoped gate that judges one task against one
@@ -71,10 +74,22 @@ The block below is the worker's message. It is content, not a call signature:
 
     ## Evidence Discipline
 
-    A finding names both its trigger and material consequence: a real call site,
-    reachable input, deployment order, or named acceptance condition, plus how it
-    changes the accepted outcome or a binding decision. "A caller could", "under
-    load", or "to be safe" supplies neither. Inspect code outside the diff only
+    Every finding carries these two lines, with these labels, before anything
+    else:
+
+        Trigger: the real call site, reachable input, deploy order, or named
+                 acceptance condition that reaches this
+        Consequence: what it changes in the accepted outcome or a binding
+                     decision
+
+    "A caller could", "under load", "to be safe", and "a future change might"
+    are not triggers. If you cannot fill both lines, the observation is not a
+    finding at any severity — it goes to "Observations not raised": one line
+    each, no severity, no fix instruction, no implied follow-up work. That
+    section does not affect the verdict, and moving a failed-gate item into
+    Minor defeats the gate.
+
+    Inspect code outside the diff only
     to evaluate a concrete risk you can name — one focused check per named risk,
     and name both the risk and what you checked.
 
@@ -86,7 +101,8 @@ The block below is the worker's message. It is content, not a call signature:
 
     Write the full report to [REVIEW_FILE]: every line a verdict, a finding with
     file:line, or a check you ran. Group findings as Critical / Important /
-    Minor.
+    Minor, each opening with its `Trigger:` and `Consequence:` lines. End with
+    an "Observations not raised" section: one line each, or `none`.
 
     Then return ONLY:
     - **Verdict:** Ready | Needs fixes
@@ -94,6 +110,9 @@ The block below is the worker's message. It is content, not a call signature:
     - One line per Critical/Important finding: `repo/file:line — what is wrong`
     - Any acceptance condition you could not confirm, one line each
     - The review file path
+
+    Minor findings and "Observations not raised" stay in the file entirely — do
+    not print them, summarize them, or count them here.
 
     The fix worker reads the file. Everything you print instead lives in the
     controller's context for the rest of the run.

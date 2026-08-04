@@ -1,9 +1,14 @@
 # Task Reviewer Prompt Template
 
-**Use this only when the harness has no review capability of its own.** Where one
-exists, give it the assigned outcome and honest diff scope, let it use its own
-output contract, and adjudicate outcome compliance yourself. A native reviewer
-reports defects in the code; it does not own product intent.
+**Prefer this template.** Use a native review capability only when it accepts
+custom review instructions, and then pass the Finding Gate, Speculative
+Robustness and Calibration sections below to it verbatim as those instructions.
+A default review rubric rewards thoroughness, and without those sections it
+returns exactly the speculative and over-testing findings they exist to
+suppress. Where the harness cannot take custom instructions, use this template.
+Either way give it the assigned outcome and honest diff scope, and adjudicate
+outcome compliance yourself. A native reviewer reports defects in the code; it
+does not own product intent.
 
 Otherwise, start a worker that does not inherit this conversation's history,
 labelled "Review Task N (outcome + quality)". If the harness lets you choose its
@@ -108,6 +113,27 @@ The block below is the worker's message. It is content, not a call signature:
     recommended (with what was done instead), plus any new defect in the fix
     itself. Skip the outcome-compliance verdict entirely.
 
+    ## Finding Gate
+
+    Every Critical and Important finding carries these two lines, with these
+    labels, before anything else:
+
+        Trigger: the real call site, reachable input, deploy order, or named
+                 acceptance condition that reaches this
+        Consequence: what it changes in the accepted outcome, a binding
+                     decision, or concrete material maintenance cost
+
+    "A caller could", "under load", "for robustness", "to be safe", "coverage
+    could be broader", and "a future change might" are not triggers. If you
+    cannot fill both lines from the diff itself, the observation does not enter
+    Critical or Important under any rewording.
+
+    Failing the gate does not mean downgrade to Minor. It means the observation
+    goes to "Observations not raised": one line each, no severity, no fix
+    instruction, no implied follow-up work. That section is where thoroughness
+    belongs, and it does not affect either verdict. Moving a failed-gate item
+    into Minor defeats the gate.
+
     ## Part 1: Outcome Compliance
 
     Compare the diff against What Was Requested:
@@ -190,7 +216,8 @@ The block below is the worker's message. It is content, not a call signature:
     - Counts by severity, and each ⚠️ cannot-verify item in one line
     - One line per Critical/Important finding: `file:line — what is wrong`.
       No rationale, no fix instructions; they are in the file. Minor findings
-      stay in the file entirely.
+      and "Observations not raised" stay in the file entirely — do not print
+      them, summarize them, or count them here.
     - The review file path
 
     The fix worker reads the file. Everything you print instead lives in the
@@ -230,7 +257,13 @@ The block below is the worker's message. It is content, not a call signature:
     #### Minor (Nice to Have)
 
     For each issue: file:line, what's wrong, why it matters, how to fix
-    (if not obvious).
+    (if not obvious). Critical and Important open with their `Trigger:` and
+    `Consequence:` lines.
+
+    ### Observations not raised
+
+    One line each, or `none`: `file:line — what you noticed, and which gate line
+    you could not fill.` No severity, no fix instruction.
 
     ### Assessment
 
