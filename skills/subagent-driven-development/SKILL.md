@@ -21,7 +21,10 @@ uncommitted facts that the current diff cannot recover.
 When plan and code differ, preserve reversible implementation freedom. A difference
 in accepted behavior, business semantics, data, permissions, public contracts, or
 irreversible effects goes to the controller for a decision about the code, the
-plan premise, or the intended result.
+plan premise, or the intended result. A disproved locating or factual premise goes
+to the controller as notification rather than a request: the worker proceeds on
+what the code actually shows, and the controller writes the correction back into
+the plan.
 
 Keep accepted outcomes and binding business facts ahead of local rubrics. Apply a
 rubric only when the actual change activates it and its named consequence affects
@@ -64,8 +67,10 @@ or user. Reversible local choices belong with the worker who reads the code.
 3. Let the worker inspect, implement, verify, self-review, and commit. Resolve
    genuine context or ownership questions at the controller; leave ordinary local
    implementation choices with the worker.
-4. Inspect the actual code, diff, commit, and evidence. Judge the result against
-   the accepted outcome and binding decisions.
+4. Inspect the actual code, diff, commit, and evidence. A worker's statement that
+   something was built or verified is not evidence; the output that would have
+   produced that statement is. Judge the result against the accepted outcome and
+   binding decisions.
 5. Add an independent review when the user requests it or when the slice changes a
    public/cross-repository contract, data semantics, permissions, irreversible
    state, or several interacting components. Controller inspection plus direct
