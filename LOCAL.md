@@ -10,7 +10,10 @@ Branch: `local/v6.1.1`
 
 - `~/.agents/sources/superpowers` is the editable source of truth.
 - Exposed skills are symlinked into `~/.agents/skills`, and both `~/.claude/skills`
-  and `~/.codex/skills` link to those. Do not edit Codex or Claude plugin caches.
+  and `~/.codex/skills` link to those. Grok reaches the same directory without a
+  symlink — `~/.grok/config.toml` sets `[skills] paths = ["~/.agents/skills"]`, so
+  it picks up additions and removals on its own. Do not edit Codex or Claude
+  plugin caches.
 - Four skills ship: `grilling`, `writing-plans`, `subagent-driven-development`,
   `systematic-debugging`. Everything upstream ships beyond these was removed
   because a current frontier model already does it, or because the rule belongs in
