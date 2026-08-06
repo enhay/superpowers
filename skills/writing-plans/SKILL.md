@@ -44,98 +44,36 @@ single-plan decision in the plan itself.
 
 ## Before writing
 
-Establish the need before inspecting: who wants to do what, and what stops them
-today. Take it from the request, or ask. Inspection tells you what constrains the
-need and what it costs — it does not tell you what the need is. A need discovered
-by reading code is a description of the code.
+A plan is written once, from an understanding that already exists. When the need,
+a load-bearing fact, or a decision that binds the outcome is still open, what is
+in front of you is an interview and not a draft — grill it out first and come
+back. Writing while those questions are open turns the plan file into the place
+the discussion happens, and every unsettled decision lands in the text reading as
+though it were settled.
 
-Before creating or updating the plan, run a pre-write clarification gate in the
-conversation. Keep two explicit sets and do not mix them:
+What has to be settled before the plan can be written:
 
-- **Facts** are observable current-state claims about the code, data, runtime,
-  external protocol, or operating conditions. Verify them from the environment or
-  an authoritative source; ask the user only for a fact that they uniquely own.
-- **Decisions** choose the intended outcome or bind anything listed under
-  Decision boundary below. Trace each one to an existing user statement or put
-  it to the user.
+- the core need — who wants to do what, what stops them today, and the smallest
+  outcome that delivers business value;
+- the load-bearing current-state facts, each labelled a verified fact, a derived
+  inference, or a bounded premise, with re-runnable evidence behind the verified
+  ones;
+- every decision binding the observable goal and acceptance, business semantics,
+  data ownership, permissions, irreversible effects, a public or cross-team
+  contract, or a real ordering constraint — each traced to something the user
+  actually said;
+- the user's confirmation that all of the above is shared.
 
-Within the facts set, label each item's epistemic status instead of flattening all
-current-state language into fact:
+Scale the architecture to the named producers, consumers, failure modes,
+contention points, release constraints, and irreversible operations that the
+inspected system actually presents. Resolve reversible implementation choices —
+internal names, file placement, library choice, control flow, local decomposition,
+commit grouping — from code and repository conventions. They stay out of the
+plan, and leaving them open is what keeps implementation free.
 
-- **Verified fact** — directly established by re-runnable evidence or an
-  authoritative source.
-- **Derived inference** — a conclusion whose evidence and reasoning are explicit;
-  never restate it as an observed fact.
-- **Bounded premise** — an unverified assumption whose scope and validation path
-  are explicit.
-- **Unknown** — information not currently established; name the evidence that
-  would resolve it when it matters.
-
-Inspect the entrypoints, producers, consumers, data model, tests, and existing
-documents that establish the facts. Re-run evidence for load-bearing current
-state. A claim about where a symbol, constant, or responsibility lives is
-load-bearing: carry the re-runnable check that establishes it, such as
-`rg 'BILLING_CYCLE_DAYS' src/`. A coverage or completeness claim must also name
-what it is measured against, and that denominator cannot come from the system's
-own registry or declaration — "42 of 42 registered" proves the list agrees with
-itself, not that the list is complete. Mark an unresolved fact as a bounded
-premise when the repository cannot settle it.
-
-Describe the core need: the smallest outcome that delivers business value. Scale
-the architecture to the named producers, consumers, failure modes, contention
-points, release constraints, and irreversible operations that the inspected system
-actually presents. Carry a recommendation when a user choice is required.
-
-Before proposing a boundary, validation, error-handling, or compatibility item,
-settle the warrant it would have to carry under Review below. An item you cannot
-warrant does not enter the decision set or the plan. Keep the warrant itself out
-of the plan text — the plan states what to build, and a justification written into
-it hardens into a fact that review then has to argue against.
-
-Resolve reversible implementation choices from code and repository conventions.
-Keep them out of the decision interview unless coordination or reversal cost makes
-one binding. A repository convention can resolve a reversible implementation
-choice, but cannot stand in for a product decision.
-
-Check the two sets separately. Facts are ready when every load-bearing
-current-state claim is verified, every inference or premise it depends on remains
-visibly labelled, and no unknown makes the decision question misleading. An
-unknown blocks the plan only when resolving it could change a binding decision;
-otherwise preserve its boundary. Decisions are ready when every binding choice
-needed to state the result has been explicitly accepted.
-
-Present the clarification result before editing the plan:
-
-- summarize fact items grouped as verified facts, derived inferences, bounded
-  premises, and material unknowns;
-- classify each unresolved decision by its Decision boundary category;
-- ask the decision question and provide one recommended answer with its material
-  consequence.
-
-Resolve dependent decisions in dependency order. Ask one question at a time when
-an answer changes which branch should be discussed next; do not batch questions
-whose answers depend on each other. Do not ask the user to rediscover facts that
-inspection can settle.
-
-Only create or update the plan after the user confirms the fact summary and the
-recommended or amended decisions form a shared understanding. Do not write an
-unconfirmed decision into a "pending" section and then design the rest of the plan
-as though one branch had already been selected.
-
-## Decision boundary
-
-Bind decisions whose reinterpretation changes the delivered product or is costly
-to reverse:
-
-- observable goal and acceptance;
-- user decisions and business semantics;
-- data ownership, migration destination, permissions, and irreversible effects;
-- public, external, cross-team, or independently released contracts;
-- real ordering constraints and the evidence that proves the outcome.
-
-Leave internal names, file placement, library choice, control flow, local
-decomposition, worker choice, review choreography, and commit grouping to the
-implementation unless coordination or reversal cost makes one binding.
+Keep the warrant for each boundary, validation, error-handling, or compatibility
+item out of the plan text. The plan states what to build; a justification written
+into it hardens into a fact that review then has to argue against.
 
 ## Plan structure
 
@@ -217,16 +155,17 @@ Update the plan when execution changes or disproves a durable fact that a later
 implementer must continue to use:
 
 1. goal, accepted scope, or acceptance;
-2. any other decision bound under Decision boundary;
+2. business semantics, data ownership, permissions, an irreversible effect, a
+   public or cross-team contract, or a real ordering constraint;
 3. a load-bearing premise whose failure changes one of those decisions;
 4. a real durable dependency or required release order;
 5. a locating or factual premise that execution disproved, even when goal and
    acceptance are unchanged — strike the original in place and record what the
    code actually showed, because the next implementer will otherwise act on it.
 
-Keep everything Decision boundary leaves to implementation, plus progress,
-commits, verification results, and review history, in code, git, runtime
-evidence, or execution handoff artifacts. A finding changes the plan when it
+Keep the reversible implementation choices listed above, plus progress, commits,
+verification results, and review history, in code, git, runtime evidence, or
+execution handoff artifacts. A finding changes the plan when it
 changes accepted scope or acceptance; otherwise it remains with its review or
 issue. Mark superseded durable decisions in place so their rationale
 survives.
