@@ -20,8 +20,10 @@ Keep the sources of truth distinct:
 - Execution state and history describe how the current change reached its state.
 
 When these disagree, decide whether the implementation, a plan premise, or the
-intended result needs attention. A plan is not an as-built inventory or an
-execution log.
+intended result needs attention. A plan is not an as-built inventory, an execution
+log, or a source of authority: push, deploy, migration, production-write, branch,
+worktree, and local commit decisions follow project and user authority, which the
+plan records but does not create.
 
 ## Choose the artifact
 
@@ -51,18 +53,9 @@ back. Writing while those questions are open turns the plan file into the place
 the discussion happens, and every unsettled decision lands in the text reading as
 though it were settled.
 
-What has to be settled before the plan can be written:
-
-- the core need — who wants to do what, what stops them today, and the smallest
-  outcome that delivers business value;
-- the load-bearing current-state facts, each labelled a verified fact, a derived
-  inference, or a bounded premise, with re-runnable evidence behind the verified
-  ones;
-- every decision binding the observable goal and acceptance, business semantics,
-  data ownership, permissions, irreversible effects, a public or cross-team
-  contract, or a real ordering constraint — each traced to something the user
-  actually said;
-- the user's confirmation that all of the above is shared.
+What has to be settled first is what grilling produces: the core need, the
+load-bearing facts with their epistemic status, every decision under Update gate
+below, and the user's confirmation that all of it is shared.
 
 Scale the architecture to the named producers, consumers, failure modes,
 contention points, release constraints, and irreversible operations that the
@@ -76,6 +69,16 @@ item out of the plan text. The plan states what to build; a justification writte
 into it hardens into a fact that review then has to argue against.
 
 ## Plan structure
+
+Both shapes below carry delivery as a sequence of coherent outcomes. Keep producer
+and consumer, schema and reader, or state transition and observable UI/API
+together when that is the real ownership boundary; split at a real dependency,
+ownership boundary, independently reversible risk, or useful verification point.
+Record an ordering requirement when it changes the result — that requirement is
+itself a binding decision — and let the implementer choose routine local steps
+after reading the code. Choose lasting automated tests when a future break could
+remain silent from all other project signals; otherwise use direct observation,
+build, typecheck, smoke, browser, data, or runtime evidence as appropriate.
 
 ### Lite — the default
 
@@ -134,21 +137,6 @@ These exist so independently reviewable plans can reference the same decisions
 without restating them. A single plan has no second reader to coordinate with,
 which is why lite omits them.
 
-Keep a delivery slice as a coherent outcome. Keep producer and consumer, schema
-and reader, or state transition and observable UI/API together when that is the
-real ownership boundary. Split at a real dependency, ownership boundary,
-independently reversible risk, or useful verification point.
-
-Record an ordering requirement when it changes the result; that requirement is a
-binding decision. Let the implementer choose routine local steps after reading the
-code. Choose lasting automated tests when a future break could remain silent from
-all other project signals; otherwise use direct observation, build, typecheck,
-smoke, browser, data, or runtime evidence as appropriate.
-
-The plan records intent and authority. Push, deploy, migration, production-write,
-branch, worktree, and local commit decisions follow project and user authority;
-the plan itself does not create that authority.
-
 ## Update gate
 
 Update the plan when execution changes or disproves a durable fact that a later
@@ -163,19 +151,20 @@ implementer must continue to use:
    acceptance are unchanged — strike the original in place and record what the
    code actually showed, because the next implementer will otherwise act on it.
 
-Keep the reversible implementation choices listed above, plus progress, commits,
-verification results, and review history, in code, git, runtime evidence, or
-execution handoff artifacts. A finding changes the plan when it
+Keep the reversible implementation choices named under Before writing, plus
+progress, commits, verification results, and review history, in code, git,
+runtime evidence, or execution handoff artifacts. A finding changes the plan when it
 changes accepted scope or acceptance; otherwise it remains with its review or
 issue. Mark superseded durable decisions in place so their rationale
 survives.
 
 ## Review
 
-Open every plan review with a scope classification, before the ordered checks
+Every plan opens its review with a scope classification, before the ordered checks
 below. It is a review output reported to the requester, never a section of the
 plan — it exists so a requester who never opens the plan can still judge whether
-the plan builds only what was asked.
+the plan builds only what was asked, and it is not a step to leave for a later
+reviewer who may never be asked for.
 
 Restate the core need in the requester's own words, not the plan's. A plan the
 model wrote reads as internally consistent even when it drifted from the request;
@@ -200,10 +189,6 @@ Scope inflation shows up two ways: a non-empty Unwarranted list, or Boundary plu
 Compatibility outweighing Core on a request that was stated simply. Report the
 classification even when nothing is unwarranted — the ratio is the signal.
 
-Run the review in a subagent given only the original request and the plan file,
-not the conversation that produced it. An agent that watched each item being
-written will find every item reasonable.
-
 Then review in order: core need and acceptance set priority; later checks are
 conditional filters, not categories the plan must fill.
 
@@ -218,18 +203,18 @@ conditional filters, not categories the plan must fill.
    chosen approach?
 8. Does implementation retain freedom over reversible local choices?
 
-Use an independent plan review when the user asks or a high-risk durable decision
-benefits from a fresh pass. The main agent owns the decision.
+Run this review yourself on every plan. Add an independent pass — a subagent given
+only the original request and the plan file, not the conversation that produced it
+— when the user asks or a high-risk durable decision benefits from fresh eyes. An
+agent that watched each item being written finds every item reasonable; that is
+what the fresh pass buys and your own pass cannot. The main agent owns the
+decision either way.
 
 ## After saving
 
-Classify what the plan builds before returning it — Core, Boundary, Compatibility,
-Unwarranted, as defined under Review. Run it against your own plan; it is not a
-step to leave for a later reviewer, who may never be asked for. Return the path,
-that classification, and the execution route, then stop for confirmation before
-executing — unless the user authorised execution in the same request. The
-classification is what a requester reads instead of the plan; a bare path and
-summary give them nothing to judge scope against. Use
-subagent-driven development when a bounded slice benefits from fresh context or
-the user requests delegation. Otherwise inspect, implement, verify slice outcomes,
-and verify final acceptance directly.
+Return the path, the classification, and the execution route, then stop for
+confirmation before executing — unless the user authorised execution in the same
+request. A bare path and summary give the requester nothing to judge scope
+against. Use subagent-driven development when a bounded slice benefits from fresh
+context or the user requests delegation. Otherwise inspect, implement, verify
+slice outcomes, and verify final acceptance directly.
