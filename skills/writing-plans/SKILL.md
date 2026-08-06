@@ -46,16 +46,14 @@ single-plan decision in the plan itself.
 
 ## Before writing
 
-A plan is written once, from an understanding that already exists. When the need,
-a load-bearing fact, or a decision that binds the outcome is still open, what is
-in front of you is an interview and not a draft — grill it out first and come
-back. Writing while those questions are open turns the plan file into the place
-the discussion happens, and every unsettled decision lands in the text reading as
-though it were settled.
+A plan is written once, from an understanding that already exists. An open need, a
+load-bearing fact still unverified, or an unsettled decision that binds the
+outcome calls for grilling, not a draft — an unsettled decision written into a
+plan reads as settled.
 
-What has to be settled first is what grilling produces: the core need, the
-load-bearing facts with their epistemic status, every decision under Update gate
-below, and the user's confirmation that all of it is shared.
+What has to be settled first: the core need, the load-bearing facts with their
+epistemic status, every decision the Update gate below binds, and the user's
+confirmation that all of it is shared.
 
 Scale the architecture to the named producers, consumers, failure modes,
 contention points, release constraints, and irreversible operations that the
@@ -70,9 +68,9 @@ into it hardens into a fact that review then has to argue against.
 
 ## Plan structure
 
-Both shapes below carry delivery as a sequence of coherent outcomes. Keep producer
-and consumer, schema and reader, or state transition and observable UI/API
-together when that is the real ownership boundary; split at a real dependency,
+Delivery is a sequence of coherent outcomes in either shape. Keep producer and
+consumer, schema and reader, or state transition and observable UI/API together
+when that is the real ownership boundary; split at a real dependency,
 ownership boundary, independently reversible risk, or useful verification point.
 Record an ordering requirement when it changes the result — that requirement is
 itself a binding decision — and let the implementer choose routine local steps
@@ -163,8 +161,7 @@ survives.
 Every plan opens its review with a scope classification, before the ordered checks
 below. It is a review output reported to the requester, never a section of the
 plan — it exists so a requester who never opens the plan can still judge whether
-the plan builds only what was asked, and it is not a step to leave for a later
-reviewer who may never be asked for.
+the plan builds only what was asked.
 
 Restate the core need in the requester's own words, not the plan's. A plan the
 model wrote reads as internally consistent even when it drifted from the request;
@@ -203,12 +200,11 @@ conditional filters, not categories the plan must fill.
    chosen approach?
 8. Does implementation retain freedom over reversible local choices?
 
-Run this review yourself on every plan. Add an independent pass — a subagent given
-only the original request and the plan file, not the conversation that produced it
-— when the user asks or a high-risk durable decision benefits from fresh eyes. An
-agent that watched each item being written finds every item reasonable; that is
-what the fresh pass buys and your own pass cannot. The main agent owns the
-decision either way.
+Run this review on every plan. Add an independent pass — a subagent given only the
+original request and the plan file, not the conversation that produced it — when
+the user asks or a high-risk durable decision warrants fresh eyes: an agent that
+watched each item being written finds every item reasonable. The main agent owns
+the decision either way.
 
 ## After saving
 

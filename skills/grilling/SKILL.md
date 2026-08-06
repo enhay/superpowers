@@ -11,10 +11,8 @@ in the conversation. The document comes afterwards, written in one pass by
 whoever owns the artifact.
 
 Write nothing while grilling — no plan, no spec, no design note, no section
-holding decisions that are still open. A file created mid-interview becomes the
-thing under discussion, and the interview degenerates into revising text nobody
-has agreed to yet. It also hardens an unsettled decision into prose that reads as
-settled, which a later reader has no way to detect.
+holding decisions that are still open. An unsettled decision written down reads as
+settled, and no later reader can tell the difference.
 
 ## Size the request first
 
@@ -39,9 +37,9 @@ they uniquely own.
 boundary below. They are the user's. Trace each one to an existing user statement
 or put it to them.
 
-Mixing the two is what makes an interview feel long: either the user is asked to
-rediscover something already sitting in their own repository, or a choice they
-own is quietly resolved by whatever the code happens to do today.
+Mixing the two fails in two directions: the user is asked to rediscover something
+already sitting in their own repository, or a choice they own is quietly resolved
+by whatever the code happens to do today.
 
 Within the facts set, label each item's epistemic status instead of flattening
 all current-state language into fact:
@@ -120,7 +118,7 @@ suspect the warrant was never checked.
 Some questions have no answer on paper: whether a state model actually holds up,
 what something should look like. Detour through a throwaway prototype, bring the
 answer back, and continue the frontier from there. The prototype answers one
-question — it is not the design, and it is not the plan.
+question; it is neither the design nor the plan.
 
 ## Done
 
