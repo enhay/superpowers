@@ -50,7 +50,15 @@ Branch: `local/v6.1.1`
   while code and runtime evidence describe the current system. Plan changes follow
   goal, acceptance, durable decision, contract, dependency, and load-bearing
   premise changes; execution details stay with code, git, runtime evidence, or
-  handoff artifacts.
+  handoff artifacts. Its `Review` ranks before it filters, because a warrant is a
+  threshold and thresholds do not rank — unlimited warranted items clear one, so
+  an admissibility review returns a longer plan every round. Warranted items carry
+  a build cost and a disposition, and `Defer` with a named reopening observation
+  is the default for a trigger that has not fired; scope inflation is weighed by
+  cost and ends at the requester as a scope decision. An independent reviewer gets
+  the request, the plan, and the code plus the suppressors only — withhold the
+  codebase and the trigger line is unfillable and cost unreadable, leaving it the
+  completeness review that causes the inflation.
 - `subagent-driven-development` delegates only when a bounded outcome benefits
   from fresh context or the user asks. Workers inspect code, implement, verify,
   and commit by default. Worker and reviewer rubrics are conditional on the

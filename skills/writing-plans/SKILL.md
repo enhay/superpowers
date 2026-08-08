@@ -182,12 +182,39 @@ reachable; "a few telemetry events are lost" is usually not a consequence worth
 fixing, so the retry queue it appears to justify is unwarranted. An item whose
 warrant is missing or half-present goes to Unwarranted.
 
-Scope inflation shows up two ways: a non-empty Unwarranted list, or Boundary plus
-Compatibility outweighing Core on a request that was stated simply. Report the
-classification even when nothing is unwarranted — the ratio is the signal.
+A warrant admits an item to consideration. It does not place the item in this
+release, and it cannot bound the plan's size: a warrant is a threshold, thresholds
+do not rank, and an unlimited number of items can clear one. That is how a plan
+whose every item is individually warranted still buries what was asked for. So
+each warranted item also carries what it costs to build and a disposition:
 
-Then review in order: core need and acceptance set priority; later checks are
-conditional filters, not categories the plan must fill.
+| Disposition | When |
+|---|---|
+| Build | it carries the requested value, or building it later costs materially more than building it now |
+| Defer | warranted, but its trigger has not fired — name the observation that reopens it |
+| Delete | unwarranted |
+
+Defer is the default for a warranted boundary or compatibility item whose trigger
+is real but has not occurred. Naming the observation that reopens it costs one
+line and buys the whole mechanism back on the day it is needed. What must be built
+now is what gets materially more expensive later — a schema, a public contract, an
+irreversible effect, a migration — and that expense is the argument, not the
+warrant.
+
+Scope inflation shows up two ways: a non-empty Delete list, or Build items outside
+Core carrying more of the delivery than Core does. Weigh by cost to build, not by
+item count; one item can outweigh six. Report the classification even when nothing
+is deleted — the distribution is the signal.
+
+Either signal ends the review at the requester, not at the author. The verdict is
+a scope decision: the requester cuts, defers, or widens the request in their own
+words. A scope finding an author can satisfy by editing gets satisfied by editing,
+and the plan grows again.
+
+Then review in order. The first two checks rank; the rest are conditional filters,
+not categories the plan must fill. A filter can only find an item admissible — it
+never asks whether the item was worth its cost, so a review that runs the filters
+and skips the ranking returns a longer plan every time.
 
 1. Does the core need deliver the valuable result at a proportionate cost?
 2. Are load-bearing premises verified or clearly bounded?
@@ -200,11 +227,40 @@ conditional filters, not categories the plan must fill.
    chosen approach?
 8. Does implementation retain freedom over reversible local choices?
 
-Run this review on every plan. Add an independent pass — a subagent given only the
-original request and the plan file, not the conversation that produced it — when
-the user asks or a high-risk durable decision warrants fresh eyes: an agent that
-watched each item being written finds every item reasonable. The main agent owns
-the decision either way.
+### Finding gate
+
+Every finding that would add to the plan carries these two lines, with these
+labels, before anything else:
+
+    Trigger: the producer, consumer, caller, or operating condition in the
+             inspected system that reaches this
+    Consequence: what it changes in the accepted outcome, a binding decision, or
+                 an irreversible effect — against what it costs to build
+
+"A caller could", "under load", "for robustness", "to be safe", and "a future
+change might" are not triggers. Neither is the absence of a mechanism the plan
+never claimed. Without both lines the observation goes to "Observations not
+raised": one line each, no severity, no recommendation, no implied follow-up work.
+That section does not affect the verdict, and moving a failed-gate item into a
+lesser severity defeats the gate.
+
+Clearing the gate earns a disposition, not a place in the plan. Most findings that
+clear it belong on Defer with their reopening observation named.
+
+Run this review on every plan. Add an independent pass — a reviewer that did not
+watch the plan being written — when the user asks or a high-risk durable decision
+warrants fresh eyes: an agent that watched each item being written finds every
+item reasonable. The main agent owns the decision either way.
+
+That reviewer needs the request in the requester's own words, the plan, and the
+code. Withholding the codebase does not narrow the review: the trigger line above
+can only be filled from the inspected system, so a reviewer without it either
+finds nothing or invents its triggers, and the only review left open to it is a
+completeness review — the failure mode itself, not a control on it. Cost is
+unreadable from plan text alone for the same reason, and cost is half of every
+disposition. Pass the suppressors — this gate and the disposition rule — and let
+the reviewer read the system for the rest. Handing over the ordered checks instead
+instructs it to produce findings in eight categories.
 
 ## After saving
 
