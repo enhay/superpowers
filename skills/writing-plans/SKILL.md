@@ -65,10 +65,17 @@ Omit empty sections. A plan normally contains:
 1. <coherent outcome> — owner/boundary, real dependency, and observable verification
 ```
 
+Write the need so it still holds if the codebase were deleted. A need that reads
+"the system lacks X" derives the requirement from an absence rather than from
+anyone's goal.
+
 Split delivery at ownership, contract, independently reversible risk, or useful
 verification boundaries. Keep a producer with its consumer, a schema with its
 reader, and a state transition with its observable API or UI when that is the
-coherent outcome. Record ordering only when changing it changes the result.
+coherent outcome. Record ordering only when changing it changes the result. Give each delivery step
+the check that observes its outcome and that check's result before the change: a
+check that already passes beforehand verifies nothing, and recording the prior
+result is what exposes that.
 
 Do not prescribe internal names, file placement, libraries, control flow, routine
 task decomposition, test ceremony, review choreography, or commit grouping unless
@@ -91,7 +98,9 @@ Start from the requester's wording. Classify proposed work as:
 
 - **Core:** directly delivers the request.
 - **Boundary or compatibility:** names a reachable trigger and the material
-  consequence of not handling it.
+  consequence of not handling it. "A caller could", "under load", "for
+  robustness", and "a future change might" are not triggers; neither is the
+  absence of a mechanism the request never asked for.
 - **Unwarranted:** lacks either half and should be deleted.
 
 For warranted work, choose **Build** only when it carries requested value or will
@@ -102,7 +111,10 @@ for consideration but does not put it in this release.
 Then check that acceptance is observable, durable semantics are exact,
 irreversible actions and dependencies are explicit, and implementation retains
 freedom over reversible choices. Use an independent reviewer only when the user
-asks or a high-risk durable decision benefits from fresh context.
+asks or a high-risk durable decision benefits from fresh context; give it the
+request in the requester's own words, the plan, and the code. A trigger can only
+be filled in from the inspected system, so a reviewer without it returns the
+completeness review that inflates the plan.
 
 After saving, return the path, scope classification, and proposed execution route.
 Stop for confirmation unless the same request already authorized execution.

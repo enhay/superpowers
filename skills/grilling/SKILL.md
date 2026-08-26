@@ -11,8 +11,11 @@ or edit a plan, spec, decision log, or notes while this skill is active.
 ## Establish the frame
 
 Identify who needs to do what, what prevents it today, and what observable result
-would count as success. If the request contains independent outcomes, separate
-them before refining the first one.
+would count as success. Take the need from the request or the user: inspection
+tells you what constrains the need and what it costs, never what the need is. A
+need discovered by reading code — "the system lacks X" — describes the code, not
+anyone's goal. If the request contains independent outcomes, separate them before
+refining the first one.
 
 Keep facts and decisions distinct:
 
@@ -36,7 +39,11 @@ unless coordination or reversal cost makes one binding.
 
 Before asking for a new boundary, validation, fallback, or compatibility path,
 establish both its reachable trigger and the material consequence of leaving it
-unhandled. Technical possibility alone is not a decision.
+unhandled. Technical possibility alone is not a decision: "the network can fail"
+is reachable, but "a few telemetry events are lost" is not a consequence worth a
+mechanism, so the retry queue it appears to justify never becomes a question. An
+unwarranted item put to the user tends to come back as a yes — asking implies it
+was worth considering.
 
 Ask the currently answerable questions in one numbered round. Give one
 recommended answer and its material tradeoff for each. Do not ask a question

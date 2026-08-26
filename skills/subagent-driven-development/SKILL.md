@@ -16,9 +16,15 @@ when fresh context or independent execution has a concrete benefit.
 
 Parallel workers are appropriate only when their file ownership is disjoint and
 neither depends on the other's uncommitted result. Otherwise dispatch
-sequentially. In one shared checkout, parallel workers do not commit
-independently; the controller reviews and commits their slices after integration.
-Use separate worktrees only when the user or project explicitly chose them.
+sequentially. Use separate worktrees only when the user or project explicitly
+chose them.
+
+In one shared checkout, parallel workers share more than files: a build, a test
+run, a dev server, or a port observes every worker's half-finished state, so its
+result proves nothing. Parallel workers there edit and report the files they
+touched; they do not run shared builds or suites and do not commit. The
+controller runs the decisive verification once after integration and commits each
+slice on its own, so a slice stays the review and rollback boundary.
 
 ## Model routing
 
@@ -26,8 +32,8 @@ Choose a worker model only when the harness exposes that control. Use a fast,
 lower-cost model for bounded mechanical edits or read-only exploration, inherit
 the current model for normal implementation, and use the most capable model for
 architecture, cross-contract integration, or high-risk final review. Context
-completeness outranks cost: if changing models requires a bounded-context fork,
-include every fact and decision the worker needs in its brief.
+completeness outranks cost: a worker on a different model usually starts cold, so
+its brief must carry every fact and decision it needs.
 
 ## Dispatch
 
@@ -62,10 +68,16 @@ the review and rollback boundary.
 Independent review is proportional, not automatic. Add a fresh reviewer when the
 user asks or the slice changes a public or cross-repository contract, data
 semantics, permissions, irreversible state, or several interacting components.
-Give the reviewer the original outcome, binding decisions, honest diff scope, and
-verification evidence. Ask it to judge outcome compliance first, then concrete
+Give the reviewer the original outcome, binding decisions, honest diff scope,
+verification evidence, and access to the code it judges. A reviewer that cannot
+read the system cannot fill in a trigger, so it either finds nothing or invents
+one, and the only review left to it is a completeness review — the failure mode,
+not a control on it. Ask it to judge outcome compliance first, then concrete
 defects. A blocking finding must name both a reachable trigger and a material
-consequence; speculative possibilities do not block the work.
+consequence. "A caller could", "under load", "for robustness", and "a future
+change might" are not triggers, and neither is the absence of a mechanism the
+work never claimed. An observation that fails this gate is reported as one line
+without severity or recommendation and does not block the work.
 
 Resolve supported findings and re-review only the fix scope. After all slices,
 verify every acceptance condition against the assembled code and, when relevant,
