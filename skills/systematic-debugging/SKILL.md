@@ -1,26 +1,26 @@
 ---
 name: systematic-debugging
-description: Trace an unexplained defect to a verified root cause before proposing a fix. Use once a literal search and local call-chain inspection have failed to explain the behavior — including when it reproduces inconsistently, spans multiple components, or a focused fix attempt has already failed.
+description: Trace an unexplained defect to a verified root cause after literal search and local call-chain inspection fail to explain it. Use for inconsistent reproduction, multi-component failures, or a focused fix attempt that already failed.
 ---
 
 # Systematic Debugging
 
-## Entry condition
+Start here only after direct source inspection cannot explain the symptom.
 
-Do not start here for a local, directly searchable bug. First inspect the literal source and nearby call chain on the main line. Enter this workflow only when that direct inspection cannot explain the behavior.
+1. Reproduce the symptom and capture the complete error, trace, or incorrect
+   output.
+2. Check recent relevant changes and compare the nearest working path.
+3. Trace the failing value or state across each component boundary, recording
+   where it is still correct and where it first diverges.
+4. State one root-cause hypothesis tied to that evidence.
+5. Test it with the smallest diagnostic action that can falsify it.
 
-## Investigation
+Do not propose a fix until the failing boundary and causal mechanism are
+supported by evidence. If the evidence rejects the hypothesis, replace it; do
+not stack speculative fixes.
 
-1. Reproduce the symptom and read the complete error or trace.
-2. Check recent relevant changes and compare a nearby working path.
-3. Trace inputs and outputs across each involved component boundary.
-4. State one root-cause hypothesis supported by the evidence.
-5. Test that hypothesis with the smallest diagnostic action.
-
-Do not propose a fix before the evidence identifies the failing boundary.
-
-## Implementation
-
-Fix the source of the problem with one focused change. Debugging complexity alone does not require a new test or TDD. Prefer the cheapest direct evidence that observes the consequential outcome: the original reproduction, an existing focused check, a smoke run, log inspection, or a data query. Add a regression test only when this defect could return silently and nothing else would catch it; a bug that a typecheck, build, existing test, or the next real use would surface again does not need one. Use strict TDD only when the user explicitly requests it or a project-local rule independently requires it.
-
-Verify the original symptom and report the evidence used.
+For a diagnosis-only request, stop at the verified cause, impact, and evidence.
+When implementation is authorized, fix the source with one focused change and
+re-observe the original symptom. Add a regression test only when the defect could
+return silently without another project signal; otherwise use the cheapest direct
+evidence that proves the outcome.
