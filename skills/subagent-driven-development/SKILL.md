@@ -20,6 +20,15 @@ sequentially. In one shared checkout, parallel workers do not commit
 independently; the controller reviews and commits their slices after integration.
 Use separate worktrees only when the user or project explicitly chose them.
 
+## Model routing
+
+Choose a worker model only when the harness exposes that control. Use a fast,
+lower-cost model for bounded mechanical edits or read-only exploration, inherit
+the current model for normal implementation, and use the most capable model for
+architecture, cross-contract integration, or high-risk final review. Context
+completeness outranks cost: if changing models requires a bounded-context fork,
+include every fact and decision the worker needs in its brief.
+
 ## Dispatch
 
 Before dispatching, inspect the plan, affected repositories, local instructions,
