@@ -201,8 +201,8 @@ extract_archive "$tar_archive" "$tar_extracted"
 tar_archive_paths="$(list_archive "$tar_archive" | normalize_archive_paths)"
 assert_equals "$tar_archive_paths" "$archive_paths" "zip and tar.gz archives contain the same paths"
 
-tar_metadata_times="$(tar -tzvf "$tar_archive" | awk '{print $6, $7, $8}' | sort -u)"
-assert_equals "$tar_metadata_times" "Dec 31 1969" "tar.gz archive normalizes entry timestamps"
+tar_metadata_times="$(TZ=UTC tar -tzvf "$tar_archive" | awk '{print $6, $7, $8}' | sort -u)"
+assert_equals "$tar_metadata_times" "Jan 1 1970" "tar.gz archive normalizes entry timestamps"
 
 metadata_archive="$TEST_ROOT/metadata-source.tar.gz"
 metadata_zip="$TEST_ROOT/metadata-source.zip"
@@ -241,9 +241,9 @@ else
 fi
 
 incomplete_metadata="$TEST_ROOT/incomplete-metadata"
-mkdir -p "$incomplete_metadata/skills/brainstorming/agents"
-cp "$metadata_source/skills/brainstorming/agents/openai.yaml" \
-  "$incomplete_metadata/skills/brainstorming/agents/openai.yaml"
+mkdir -p "$incomplete_metadata/skills/grilling/agents"
+cp "$metadata_source/skills/grilling/agents/openai.yaml" \
+  "$incomplete_metadata/skills/grilling/agents/openai.yaml"
 
 set +e
 missing_output="$("$SCRIPT_UNDER_TEST" --allow-dirty --metadata-source "$incomplete_metadata" --output "$TEST_ROOT/missing.tar.gz" 2>&1)"
