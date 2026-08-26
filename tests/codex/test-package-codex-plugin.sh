@@ -201,7 +201,7 @@ extract_archive "$tar_archive" "$tar_extracted"
 tar_archive_paths="$(list_archive "$tar_archive" | normalize_archive_paths)"
 assert_equals "$tar_archive_paths" "$archive_paths" "zip and tar.gz archives contain the same paths"
 
-tar_metadata_times="$(TZ=UTC tar -tzvf "$tar_archive" | awk '{print $6, $7, $8}' | sort -u)"
+tar_metadata_times="$(LC_ALL=C TZ=UTC tar -tzvf "$tar_archive" | awk '{print $6, $7, $8}' | sort -u)"
 assert_equals "$tar_metadata_times" "Jan 1 1970" "tar.gz archive normalizes entry timestamps"
 
 metadata_archive="$TEST_ROOT/metadata-source.tar.gz"
