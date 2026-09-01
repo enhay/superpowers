@@ -69,24 +69,5 @@ semantics, permissions, irreversible effects, public contracts, real release
 order, or a load-bearing premise. Keep progress, commits, and verification results
 elsewhere.
 
-## Readiness review
-
-Start from the requester's wording. Work that directly delivers the request is
-core. Work that adds a boundary, validation, fallback, or compatibility path must
-name a reachable trigger and the material consequence of leaving it unhandled.
-"A caller could", "under load", "for robustness", and "a future change might" are
-not triggers; neither is the absence of a mechanism the request never asked for.
-Lacking either half, delete it. For warranted work, build only what carries
-requested value or will be materially more expensive to add later — otherwise
-defer it and name the observation that reopens it.
-
-Then check that acceptance is observable, durable semantics are exact,
-irreversible actions and dependencies are explicit, and implementation retains
-freedom over reversible choices. Use an independent reviewer only when the user
-asks or a high-risk durable decision benefits from fresh context; give it the
-request in the requester's own words, the plan, and the code. A trigger can only
-be filled in from the inspected system, so a reviewer without it returns the
-completeness review that inflates the plan.
-
-After saving, return the path, scope classification, and proposed execution route.
-Stop for confirmation unless the same request already authorized execution.
+After saving, return the path and proposed execution route. Stop for
+confirmation unless the same request already authorized execution.
