@@ -8,38 +8,27 @@ description: Use only to create or update a durable implementation plan or spec,
 Write a durable agreement about the intended result, not a transcript or an
 implementation recipe. The artifact must be **decision-complete and
 implementation-open**: exact about observable outcomes and costly boundaries,
-but silent about reversible local choices the implementer can recover from code.
+silent about reversible local choices the implementer can recover from code.
 
 ## Preconditions
 
 Write only after the need, load-bearing facts, binding decisions, and acceptance
-are settled and confirmed by the user. If any of those remain open, use
-`grilling`; do not encode an unresolved branch as a draft or `pending` item.
+are settled and confirmed by the user; if any remain open, use `grilling`. Do not
+encode an unresolved branch as a draft or `pending` item.
 
-Keep sources of truth separate:
+The plan defines the intended result and durable constraints; code, schema,
+configuration, and runtime evidence define current state; todo state, commits, and
+reviews define progress. A plan records authority — it does not grant permission
+to push, deploy, migrate, or write production data.
 
-- the plan defines the intended result and durable constraints;
-- code, schema, configuration, data, and runtime evidence define current state;
-- todo state, commits, reviews, and handoffs define execution progress.
+## The artifact
 
-A plan records authority; it does not grant permission to push, deploy, migrate,
-write production data, or perform another external action.
-
-## Choose the artifact
-
-- **No artifact:** direct answer, short diagnosis, or local change whose intent is
-  recoverable from its commit and code.
-- **One plan:** one coordinated delivery produces one observable outcome, even
-  when it crosses repositories.
-- **Spec plus plans:** independent deliveries must share durable architecture,
-  business semantics, or a public contract, or the user explicitly asks for a
-  spec.
-
-Use project paths when defined; otherwise use
-`docs/plans/YYYY-MM-DD-<slug>.md` and `docs/specs/YYYY-MM-DD-<slug>.md`. A spec
+One coordinated delivery producing one observable outcome gets one plan, even when
+it crosses repositories. Add a spec above the plans only when independent
+deliveries must share durable architecture, business semantics, or a public
+contract, or the user asks. Use project paths when defined, otherwise
+`docs/plans/YYYY-MM-DD-<slug>.md` and `docs/specs/YYYY-MM-DD-<slug>.md`; a spec
 lists its child plans and each child links back.
-
-## Minimum useful content
 
 Omit empty sections. A plan normally contains:
 
@@ -65,48 +54,31 @@ Omit empty sections. A plan normally contains:
 1. <coherent outcome> — owner/boundary, real dependency, and observable verification
 ```
 
-Write the need so it still holds if the codebase were deleted. A need that reads
-"the system lacks X" derives the requirement from an absence rather than from
-anyone's goal.
-
-Split delivery at ownership, contract, independently reversible risk, or useful
-verification boundaries. Keep a producer with its consumer, a schema with its
-reader, and a state transition with its observable API or UI when that is the
-coherent outcome. Record ordering only when changing it changes the result. Give each delivery step
-the check that observes its outcome and that check's result before the change: a
-check that already passes beforehand verifies nothing, and recording the prior
-result is what exposes that.
-
-Do not prescribe internal names, file placement, libraries, control flow, routine
-task decomposition, test ceremony, review choreography, or commit grouping unless
-one is genuinely binding. Choose durable automated tests only for behavior that
-could regress silently without another project signal; otherwise name the
-appropriate direct evidence.
-
-## Update gate
+Write the need so it still holds if the codebase were deleted. Split delivery at
+ownership, contract, independently reversible risk, or useful verification
+boundaries — keeping a producer with its consumer, a schema with its reader, and a
+state transition with its observable API or UI when that is the coherent outcome.
+Record ordering only when changing it changes the result. Give each step the check
+that observes its outcome **and that check's result before the change**: a check
+that already passes beforehand verifies nothing, and recording the prior result is
+what exposes that.
 
 Update the artifact only when execution changes or disproves something a later
-implementer must continue to honor: goal, accepted scope, acceptance, business or
-data semantics, permissions, irreversible effects, public contracts, real release
-order, durable dependency, or a load-bearing premise. Correct a factual premise
-when leaving it would misdirect later work. Keep progress, commits, verification
-results, and review history elsewhere.
+implementer must honor — goal, accepted scope, acceptance, business or data
+semantics, permissions, irreversible effects, public contracts, real release
+order, or a load-bearing premise. Keep progress, commits, and verification results
+elsewhere.
 
 ## Readiness review
 
-Start from the requester's wording. Classify proposed work as:
-
-- **Core:** directly delivers the request.
-- **Boundary or compatibility:** names a reachable trigger and the material
-  consequence of not handling it. "A caller could", "under load", "for
-  robustness", and "a future change might" are not triggers; neither is the
-  absence of a mechanism the request never asked for.
-- **Unwarranted:** lacks either half and should be deleted.
-
-For warranted work, choose **Build** only when it carries requested value or will
-be materially more expensive to add later. Otherwise **Defer** it and name the
-observation that reopens it. Rank by value and cost; a valid trigger admits work
-for consideration but does not put it in this release.
+Start from the requester's wording. Work that directly delivers the request is
+core. Work that adds a boundary, validation, fallback, or compatibility path must
+name a reachable trigger and the material consequence of leaving it unhandled.
+"A caller could", "under load", "for robustness", and "a future change might" are
+not triggers; neither is the absence of a mechanism the request never asked for.
+Lacking either half, delete it. For warranted work, build only what carries
+requested value or will be materially more expensive to add later — otherwise
+defer it and name the observation that reopens it.
 
 Then check that acceptance is observable, durable semantics are exact,
 irreversible actions and dependencies are explicit, and implementation retains

@@ -7,20 +7,16 @@ description: Trace an unexplained defect to a verified root cause after literal 
 
 Start here only after direct source inspection cannot explain the symptom.
 
-1. Reproduce the symptom and capture the complete error, trace, or incorrect
-   output.
-2. Check recent relevant changes and compare the nearest working path.
-3. Trace the failing value or state across each component boundary, recording
-   where it is still correct and where it first diverges.
-4. State one root-cause hypothesis tied to that evidence.
-5. Test it with the smallest diagnostic action that can falsify it.
+Reproduce it and capture the complete output. Trace the failing value across each
+component boundary — against the nearest working path and recent relevant changes
+— recording where it is still correct and where it first diverges. State one
+root-cause hypothesis tied to that evidence and test it with the smallest action
+that can falsify it.
 
-Do not propose a fix until the failing boundary and causal mechanism are
-supported by evidence. If the evidence rejects the hypothesis, replace it; do
-not stack speculative fixes.
+Do not propose a fix until the failing boundary and causal mechanism are supported
+by evidence. If the evidence rejects the hypothesis, replace it rather than
+stacking another speculative fix.
 
 For a diagnosis-only request, stop at the verified cause, impact, and evidence.
 When implementation is authorized, fix the source with one focused change and
-re-observe the original symptom. Add a regression test only when the defect could
-return silently without another project signal; otherwise use the cheapest direct
-evidence that proves the outcome.
+re-observe the original symptom.
