@@ -9,11 +9,10 @@ Branch: `local/v6.1.1`
 ## Policy
 
 - `~/.agents/sources/superpowers` is the editable source of truth.
-- `~/.agents/skills`, `~/.claude/skills`, and `~/.codex/skills` expose the same
-  files through symlinks. Grok reads `~/.agents/skills` from its config. Never
-  edit a runtime's plugin cache.
-- Codex resolves those symlinks to this plugin root and therefore exposes the
-  skills as `superpowers:<name>`; Claude Code and Grok use the base names.
+- `~/.agents/skills` and `~/.claude/skills` expose the same files through
+  top-level symlinks. Grok reads `~/.agents/skills` from its config. Codex uses
+  `~/.codex/skills/superpowers/<name>` symlinks so its catalog path matches the
+  qualified `superpowers:<name>` identifier. Never edit a runtime's plugin cache.
 - Three skills ship: `grilling`, `writing-plans`, and
   `subagent-driven-development`.
 - Each skill contains only workflow choices that materially change agent
