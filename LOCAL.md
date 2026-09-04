@@ -12,6 +12,8 @@ Branch: `local/v6.1.1`
 - `~/.agents/skills`, `~/.claude/skills`, and `~/.codex/skills` expose the same
   files through symlinks. Grok reads `~/.agents/skills` from its config. Never
   edit a runtime's plugin cache.
+- Codex resolves those symlinks to this plugin root and therefore exposes the
+  skills as `superpowers:<name>`; Claude Code and Grok use the base names.
 - Three skills ship: `grilling`, `writing-plans`, and
   `subagent-driven-development`.
 - Each skill contains only workflow choices that materially change agent
@@ -59,7 +61,7 @@ faster than the harness.
 ## Updating
 
 Fetch upstream tags, create `local/<version>` from the new stable tag, and
-cherry-pick local customization commits. Review only the four retained skills.
+cherry-pick local customization commits. Review only the three retained skills.
 `grilling` is local-only and has no upstream counterpart.
 
 When adding or removing a skill, update this file, the symlink roots, the
