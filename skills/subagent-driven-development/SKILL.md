@@ -5,25 +5,32 @@ description: Use when executing a written plan and a bounded slice of the work b
 
 # Subagent-Driven Development
 
-Delegation is chosen and the orchestration shape is obvious. These four go wrong
+Delegation is chosen and the orchestration shape is obvious. These go wrong
 anyway.
+
+**Delegation buys exactly one thing: reading that never enters your context.** It
+repays only when that reading has not happened yet, will not be needed again by
+you or by the next slice, and is far larger than what has to come back. Work
+whose files and facts you can already name fails the first test — you did the
+reading, and a worker would only pay for it a second time.
 
 **Slice by module, not by plan step.** Delivery slices are cut for review and
 rollback; a worker slice is cut so it can be finished from the code it owns. One
-that cuts across modules re-reads neighbours it does not own and sends the rest
-back to you. Merge plan steps living in one module into one worker, never split a
-module across two — and check the floor first: if writing the brief would already
-state the change, make the change yourself.
+cutting across modules re-reads neighbours it does not own and sends the rest
+back to you. Merge plan steps living in one module into one worker; never split a
+module across two.
 
 **In one shared checkout, a parallel worker's build, suite, dev server, or port
 observes every other worker's half-finished state, so its result proves
 nothing.** Parallel workers there edit and report only; you run the decisive
 verification once after integration.
 
-**A worker returns files touched, decisions made, its check result, and open
-questions — not code, not a diff, not raw output**, which hand back the reading
-you delegated to avoid. Give it the part of the plan it owns plus every fact it
-needs to finish cold, not the whole plan, and no brief or review file on disk.
+**Tell each worker what not to send back: no code bodies, no diff, no raw
+output.** Its report is free-form text and nothing enforces a shape, so the
+prohibition is the only part worth spending words on — returning everything is
+the default, and it hands back the reading you delegated to avoid. Give it the
+part of the plan it owns plus what it needs to finish cold, and keep briefs and
+review notes off disk.
 
 **Re-observe the outcome at its own layer; do not re-read the change.** A diff
 shows what moved, not whether the accepted result holds, and it is the most
