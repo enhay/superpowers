@@ -10,7 +10,8 @@ controller cannot recover from the code once workers are running.
 
 The controller owns scope, integration, user decisions, and final acceptance;
 each worker owns a precise file or responsibility boundary. Delegate coherent
-outcomes, not mechanical steps.
+outcomes, not mechanical steps. Unless the harness explicitly forks your context,
+a worker starts cold: its brief must carry every fact and decision it needs.
 
 ## Concurrency
 
@@ -27,15 +28,6 @@ slice on its own, so a slice stays the review and rollback boundary.
 
 Tell each worker it is not alone in the codebase: preserve unknown changes, never
 revert another worker's edits, adapt to compatible ones already present.
-
-## Model routing
-
-Choose a worker model only when the harness exposes that control: a fast,
-lower-cost model for bounded mechanical edits or read-only exploration, the
-current model for normal implementation, the most capable model for architecture,
-cross-contract integration, or high-risk final review. Context completeness
-outranks cost — a worker on a different model usually starts cold, so its brief
-must carry every fact and decision it needs.
 
 ## Integration
 
