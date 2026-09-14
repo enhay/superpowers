@@ -58,10 +58,14 @@ Write the need so it still holds if the codebase were deleted. Split delivery at
 ownership, contract, independently reversible risk, or useful verification
 boundaries — keeping a producer with its consumer, a schema with its reader, and a
 state transition with its observable API or UI when that is the coherent outcome.
-Record ordering only when changing it changes the result. Give each step the check
-that observes its outcome **and that check's result before the change**: a check
-that already passes beforehand verifies nothing, and recording the prior result is
-what exposes that.
+Record ordering only when changing it changes the result. Give each step the
+lightest check that observes its accepted outcome; this need not be a new test.
+For a bug fix, identify the prior failure when feasible. For behavior-preserving
+refactoring or cleanup, existing checks passing before and after are useful
+regression evidence. Derive checks from current acceptance, not deleted
+implementation details; retiring logic does not create a requirement to test its
+absence or invert its old assertions. Follow the global rules for test lifecycle
+and TDD. Keep actual run results with execution evidence, not in the plan.
 
 Update the artifact only when execution changes or disproves something a later
 implementer must honor — goal, accepted scope, acceptance, business or data
