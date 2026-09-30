@@ -41,7 +41,7 @@ Omit empty sections. A plan normally contains:
 <need, verified constraints, and any bounded premise with its validation path>
 
 ## Acceptance
-- **WHEN** <concrete trigger> **THEN** <observable result>
+- <what the requester checks to call it done, and where it shows>
 
 ## Scope
 - In: <required outcome>
@@ -70,6 +70,15 @@ A rule that says how the business works, rather than what this delivery does,
 outlives the plan. Put it in the project's domain document or a spec when writing
 and link to it; kept in the plan, it vanishes when the plan is retired and every
 later plan restates it.
+
+Acceptance is what the requester will check to call the work done, in their
+terms, each item with where it shows — a page, an API field, a stored row, a
+replay on real data. Give a behavior that starts from an event its trigger; state
+a property that always holds as a property rather than inventing a trigger for
+it. Rules about how the business works are not acceptance, and neither is a named
+sample: the executor reads every item as something to test and fits its work to
+any sample it is shown. An acceptance list running to dozens of items has usually
+absorbed those rules.
 
 Write the need so it still holds if the codebase were deleted. Split delivery at
 ownership, contract, independently reversible risk, or useful verification
