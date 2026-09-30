@@ -8,9 +8,9 @@ description: Use when delegating implementation to subagents - executing a plan 
 Delegation is chosen and the orchestration shape is obvious. These go wrong
 anyway.
 
-**Delegation buys exactly one thing: reading that never enters your context.** It
-repays only when that reading has not happened yet, will not be needed again by
-you or by the next slice, and is far larger than what has to come back. Work
+**Delegation buys reading that never enters your context.** It repays only when
+that reading has not happened yet, will not be needed again by you or by the next
+slice, and is far larger than what has to come back. Work
 whose files and facts you can already name fails the first test — you did the
 reading, and a worker would only pay for it a second time.
 

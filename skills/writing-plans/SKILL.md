@@ -54,7 +54,7 @@ Omit empty sections. A plan normally contains:
 1. <what this slice delivers, end to end> — real dependency
 
 ## Status
-<where the work stands, what is open, what waits on the user>
+<where the work stands, what is open, what waits on the user; overwritten, not appended>
 ```
 
 The Need carries the plan: prose the requester would recognise as their own
@@ -72,10 +72,6 @@ Split delivery at ownership, contract, independently reversible risk, or useful
 verification boundaries — keeping a producer with its consumer, a schema with its
 reader, and a state transition with its observable API or UI when that is the
 coherent outcome. Record ordering only when changing it changes the result.
-
-Execution writes only Status, overwriting it. Any other change waits for the
-user, is committed on its own with its reason, and appends to the request rather
-than rewriting it.
 
 After saving, return the path and proposed execution route. Stop for
 confirmation unless the same request already authorized execution.

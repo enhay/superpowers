@@ -20,20 +20,18 @@ them. Trace each decision to an existing user statement, or ask.
 
 ## Ask only binding questions
 
-The user decides the goal and acceptance, business semantics, data ownership and
-migration destination, permissions, irreversible effects, public or cross-team
-contracts, and ordering constraints that change the result.
+The user decides the goal and what done looks like, architecture, UX, business
+and data semantics (ownership and migration destination included), permissions,
+irreversible effects, public or cross-team contracts, and ordering that changes
+the result.
 
 Resolve reversible choices from the current system: internal names, files,
 libraries, control flow, local decomposition, worker choice, review choreography,
 and commit grouping. Do not turn those into questions unless coordination or
 reversal cost makes one binding.
 
-Before asking for a new boundary, validation, fallback, compatibility path, or
-structure, establish both its reachable trigger and the material consequence of leaving it
-unhandled. Technical possibility alone is not a decision: "the network can fail"
-is reachable, but "a few telemetry events are lost" is not a consequence worth a
-mechanism, so the retry queue it appears to justify never becomes a question. An
+Put a new boundary, validation, fallback, compatibility path, or structure to the
+user only once the global rules' trigger-and-consequence test holds for it. An
 unwarranted item put to the user tends to come back as a yes — asking implies it
 was worth considering.
 
