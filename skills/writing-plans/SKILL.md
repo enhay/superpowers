@@ -41,7 +41,7 @@ Omit empty sections. A plan normally contains:
 <need, verified constraints, and any bounded premise with its validation path>
 
 ## Acceptance
-- <what the requester checks to call it done, and where it shows>
+- <who, in what situation, sees what — and where that shows>
 
 ## Scope
 - In: <required outcome>
@@ -71,14 +71,18 @@ outlives the plan. Put it in the project's domain document or a spec when writin
 and link to it; kept in the plan, it vanishes when the plan is retired and every
 later plan restates it.
 
-Acceptance is what the requester will check to call the work done, in their
-terms, each item with where it shows — a page, an API field, a stored row, a
-replay on real data. Give a behavior that starts from an event its trigger; state
-a property that always holds as a property rather than inventing a trigger for
-it. Rules about how the business works are not acceptance, and neither is a named
-sample: the executor reads every item as something to test and fits its work to
-any sample it is shown. An acceptance list running to dozens of items has usually
-absorbed those rules.
+Acceptance keeps what when/then was for — a concrete situation and an observable
+result — without making every item wear it. Write each item the way the requester
+would describe checking it: who, in what situation, sees what, and where that
+shows (a page, an API field, a stored row, a replay on real data). One
+representative situation per behavior is enough; the executor generalizes from
+it, and reads an enumerated list as a test suite to write. Where the risk is a
+boundary, put the neighbouring case that must come out differently in the same
+item — the enabled store sees the option, the other store does not, even by
+calling the API directly. State a property that always holds as a property. For
+judgment work, the situation is how the requester will judge it: which real
+cases, compared against what. Business rules and named samples stay out: rules
+belong in the domain document, and work gets fitted to any sample it is shown.
 
 Write the need so it still holds if the codebase were deleted. Split delivery at
 ownership, contract, independently reversible risk, or useful verification
