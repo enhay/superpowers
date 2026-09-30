@@ -37,11 +37,14 @@ Omit empty sections. A plan normally contains:
 
 > Request (YYYY-MM-DD): "<requester's words>"
 
+## Need
+<whose problem, in what situation, what they can do or see once it is solved, why it matters, and what stays as it is>
+
 ## Context
-<need, verified constraints, and any bounded premise with its validation path>
+<verified constraints, and any bounded premise with its validation path>
 
 ## Acceptance
-- <who, in what situation, sees what — and where that shows>
+<only what the Need leaves open, and where it shows>
 
 ## Scope
 - In: <required outcome>
@@ -71,33 +74,36 @@ outlives the plan. Put it in the project's domain document or a spec when writin
 and link to it; kept in the plan, it vanishes when the plan is retired and every
 later plan restates it.
 
-Acceptance keeps what when/then was for — a concrete situation and an observable
-result — without making every item wear it. Write each item the way the requester
-would describe checking it: who, in what situation, sees what, and where that
-shows (a page, an API field, a stored row, a replay on real data). One
-representative situation per behavior is enough; the executor generalizes from
-it, and reads an enumerated list as a test suite to write. Where the risk is a
-boundary, put the neighbouring case that must come out differently in the same
-item — the enabled store sees the option, the other store does not, even by
-calling the API directly. State a property that always holds as a property. For
-judgment work, the situation is how the requester will judge it: which real
-cases, compared against what. Business rules and named samples stay out: rules
-belong in the domain document, and work gets fitted to any sample it is shown.
+The Need carries the plan. Write it as prose the requester would recognise as
+their own problem: whose problem it is, the situation they are in, what they can
+do or see once it is solved, why that matters, and what stays as it is. Stated
+that way it already says what done looks like, and an executor reasoning from a
+clear need handles cases no list anticipated. Use the requester's terms, not the
+code's, so it still holds if the codebase were deleted.
 
-Write the need so it still holds if the codebase were deleted. Split delivery at
-ownership, contract, independently reversible risk, or useful verification
-boundaries — keeping a producer with its consumer, a schema with its reader, and a
+Acceptance holds only what the Need leaves open: a boundary where a neighbouring
+case must come out differently, a number, or — for judgment work — which real
+cases the requester will judge it on, compared against what. Say where each
+shows: a page, an API field, a stored row, a replay on real data. When the Need
+already says it, omit the section; restating the need as cases adds no clarity
+and reads to the executor as a test suite to write. Business rules and named
+samples stay out: rules belong in the domain document, and work gets fitted to
+any sample it is shown.
+
+Split delivery at ownership, contract, independently reversible risk, or useful
+verification boundaries — keeping a producer with its consumer, a schema with its reader, and a
 state transition with its observable API or UI when that is the coherent outcome.
 Record ordering only when changing it changes the result. Give each step the
 lightest check that observes its accepted outcome; this need not be a new test.
 For a bug fix, identify the prior failure when feasible. For behavior-preserving
 refactoring or cleanup, existing checks passing before and after are useful
-regression evidence. Derive checks from current acceptance, not deleted
+regression evidence. Derive checks from the current need, not deleted
 implementation details; retiring logic does not create a requirement to test its
 absence or invert its old assertions. Follow the global rules for test lifecycle
 and TDD.
 
-Request, Acceptance, Scope, Structure, and Binding decisions are the agreement.
+Request, Need, Acceptance, Scope, Structure, and Binding decisions are the
+agreement.
 The Request quotes the requester and is never rewritten; a later request is
 appended with its date, because the original words are what every later reader
 checks the plan against. When execution finds the agreement wrong, incomplete, or

@@ -54,7 +54,8 @@ that do not depend on them.
 
 ## Finish
 
-Summarize the verified facts, bounded premises, and material unknowns; each
+Summarize the need as the plan will state it, in the user's terms; the verified
+facts, bounded premises, and material unknowns; each
 binding decision and its chosen value; which existing structure carries the
 change and what is added to it; and any unknown that still blocks a decision. Ask
 the user to confirm, then stop.
