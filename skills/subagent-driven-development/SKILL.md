@@ -50,3 +50,14 @@ assembled result against the real consumer path, with the other side running. A
 code reviewer is the same trade: worth its cold read only for risk no runnable
 check can see, spawned once over the assembled result, and it owns that read
 rather than duplicating yours.
+
+**When the outcome is a judgment, a green check is not the outcome.**
+Classification rules, calibrations, scoring, prompts, and analyses are checked
+against the samples at hand, and a worker can pass those checks by fitting the
+samples — a keyword, a threshold, a special case — without modelling the process
+that produced them. The brief for such work carries the intent itself rather than
+a pointer to it: the process being modelled, and what drifting from it looks like
+in this task; pointed at a long plan, a worker decides alone which constraint
+matters. Have the worker state its approach before editing, so a misreading is
+corrected before it is paid for. Accept on the method and on evidence it was not
+tuned against — a sample used to fix a rule no longer tests it.

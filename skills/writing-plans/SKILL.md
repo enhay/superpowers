@@ -17,9 +17,9 @@ are settled and confirmed by the user; if any remain open, use `grilling`. Do no
 encode an unresolved branch as a draft or `pending` item.
 
 The plan defines the intended result and durable constraints; code, schema,
-configuration, and runtime evidence define current state; todo state, commits, and
-reviews define progress. A plan records authority — it does not grant permission
-to push, deploy, migrate, or write production data.
+configuration, and runtime evidence define current state; todo state and the
+plan's Status define progress. A plan records authority — it does not grant
+permission to push, deploy, migrate, or write production data.
 
 ## The artifact
 
@@ -35,7 +35,7 @@ Omit empty sections. A plan normally contains:
 ```markdown
 # <Outcome> Implementation Plan
 
-> Request: "<requester's words>"
+> Request (YYYY-MM-DD): "<requester's words>"
 
 ## Context
 <need, verified constraints, and any bounded premise with its validation path>
@@ -47,12 +47,29 @@ Omit empty sections. A plan normally contains:
 - In: <required outcome>
 - Out: <tempting adjacent work deliberately excluded>
 
+## Structure
+- Carried by: <the existing structure the outcome lives in>
+- Added: <each new table, field, service, permission, configuration, compatibility path, or script, and what the existing structure cannot carry>
+
 ## Binding decisions
 - D1: <only a durable or costly choice; include source/date when useful>
 
 ## Delivery
 1. <coherent outcome> — owner/boundary, real dependency, and observable verification
+
+## Status
+<where the work stands, what is open, what waits on the user>
 ```
+
+Structure is answered for every change to code or data, even when the answer is
+that nothing is added: it is where costly shape gets decided, and an implementer
+who finds it blank adds shape of their own. Diagrams of the existing system and
+restated code do not belong there — the code already defines current state.
+
+A rule that says how the business works, rather than what this delivery does,
+outlives the plan. Put it in the project's domain document or a spec when writing
+and link to it; kept in the plan, it vanishes when the plan is retired and every
+later plan restates it.
 
 Write the need so it still holds if the codebase were deleted. Split delivery at
 ownership, contract, independently reversible risk, or useful verification
@@ -65,13 +82,22 @@ refactoring or cleanup, existing checks passing before and after are useful
 regression evidence. Derive checks from current acceptance, not deleted
 implementation details; retiring logic does not create a requirement to test its
 absence or invert its old assertions. Follow the global rules for test lifecycle
-and TDD. Keep actual run results with execution evidence, not in the plan.
+and TDD.
 
-Update the artifact only when execution changes or disproves something a later
-implementer must honor — goal, accepted scope, acceptance, business or data
-semantics, permissions, irreversible effects, public contracts, real release
-order, or a load-bearing premise. Keep progress, commits, and verification results
-elsewhere.
+Request, Acceptance, Scope, Structure, and Binding decisions are the agreement.
+The Request quotes the requester and is never rewritten; a later request is
+appended with its date, because the original words are what every later reader
+checks the plan against. When execution finds the agreement wrong, incomplete, or
+overtaken, record the conflict in Status and continue only the work it does not
+touch; the agreement changes once the user confirms, with that date on the
+changed item. Context and Delivery may be corrected against evidence without
+asking. Any change outside Status is committed on its own, its message naming what
+changed and why: git is the plan's history, and a revision folded into a code
+commit leaves none that anyone will find.
+
+Status is the part execution writes freely: where the work stands, what is open,
+what waits on the user. Overwrite it — it is a snapshot for whoever resumes, not a
+log. Run results stay with execution evidence, linked from Status.
 
 After saving, return the path and proposed execution route. Stop for
 confirmation unless the same request already authorized execution.
