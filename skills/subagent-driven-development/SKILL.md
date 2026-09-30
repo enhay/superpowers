@@ -26,6 +26,14 @@ restating it in the brief spends yours. Where several workers need the same
 ground, send one scout first to read it and write the notes the rest point at,
 so that read is paid once.
 
+**Acceptance is the one thing the brief states outright.** A worker starts cold
+and stops when it believes it is done, so derive from the plan's need what done
+means for its slice — **WHEN** a concrete trigger **THEN** an observable result,
+and where that shows. When the slice is a judgment — rules, scoring, prompts,
+analyses — a check on the samples at hand can be passed by fitting them, so
+acceptance is how the requester will judge it: which real cases, against what;
+and the worker states its approach before editing.
+
 **Running workers at once breaks differently in one repo and across two.** In one
 checkout it is a dirty read: any build, suite, dev server, or port sees the
 others' half-finished state, so a green result proves nothing — worktrees dissolve
@@ -50,14 +58,3 @@ assembled result against the real consumer path, with the other side running. A
 code reviewer is the same trade: worth its cold read only for risk no runnable
 check can see, spawned once over the assembled result, and it owns that read
 rather than duplicating yours.
-
-**When the outcome is a judgment, a green check is not the outcome.**
-Classification rules, calibrations, scoring, prompts, and analyses are checked
-against the samples at hand, and a worker can pass those checks by fitting the
-samples — a keyword, a threshold, a special case — without modelling the process
-that produced them. The brief for such work carries the intent itself rather than
-a pointer to it: the process being modelled, and what drifting from it looks like
-in this task; pointed at a long plan, a worker decides alone which constraint
-matters. Have the worker state its approach before editing, so a misreading is
-corrected before it is paid for. Accept on the method and on evidence it was not
-tuned against — a sample used to fix a rule no longer tests it.

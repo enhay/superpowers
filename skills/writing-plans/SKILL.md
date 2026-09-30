@@ -7,14 +7,14 @@ description: Use only to create or update a durable implementation plan or spec,
 
 Write a durable agreement about the intended result, not a transcript or an
 implementation recipe. The artifact must be **decision-complete and
-implementation-open**: exact about observable outcomes and costly boundaries,
-silent about reversible local choices the implementer can recover from code.
+implementation-open**: exact about the need and costly boundaries, silent about
+reversible local choices the implementer can recover from code.
 
 ## Preconditions
 
-Write only after the need, load-bearing facts, binding decisions, and acceptance
-are settled and confirmed by the user; if any remain open, use `grilling`. Do not
-encode an unresolved branch as a draft or `pending` item.
+Write only after the need, load-bearing facts, and binding decisions are settled
+and confirmed by the user; if any remain open, use `grilling`. Do not encode an
+unresolved branch as a draft or `pending` item.
 
 The plan defines the intended result and durable constraints; code, schema,
 configuration, and runtime evidence define current state; todo state and the
@@ -43,80 +43,39 @@ Omit empty sections. A plan normally contains:
 ## Context
 <verified constraints, and any bounded premise with its validation path>
 
-## Acceptance
-<only what the Need leaves open, and where it shows>
-
 ## Scope
 - In: <required outcome>
 - Out: <tempting adjacent work deliberately excluded>
 
-## Structure
-- Carried by: <the existing structure the outcome lives in>
-- Added: <each new table, field, service, permission, configuration, compatibility path, or script, and what the existing structure cannot carry>
-
 ## Binding decisions
-- D1: <only a durable or costly choice; include source/date when useful>
+- D1: <a durable or costly choice; include source/date when useful>
 
 ## Delivery
-1. <coherent outcome> — owner/boundary, real dependency, and observable verification
+1. <what this slice delivers, end to end> — real dependency
 
 ## Status
 <where the work stands, what is open, what waits on the user>
 ```
 
-Structure is answered for every change to code or data, even when the answer is
-that nothing is added: it is where costly shape gets decided, and an implementer
-who finds it blank adds shape of their own. Diagrams of the existing system and
-restated code do not belong there — the code already defines current state.
+The Need carries the plan: prose the requester would recognise as their own
+problem, in their terms rather than the code's. Stated that way it already says
+what done looks like. Acceptance for a worker is derived from it at dispatch, not
+listed here.
 
-A rule that says how the business works, rather than what this delivery does,
-outlives the plan. Put it in the project's domain document or a spec when writing
-and link to it; kept in the plan, it vanishes when the plan is retired and every
-later plan restates it.
-
-The Need carries the plan. Write it as prose the requester would recognise as
-their own problem: whose problem it is, the situation they are in, what they can
-do or see once it is solved, why that matters, and what stays as it is. Stated
-that way it already says what done looks like, and an executor reasoning from a
-clear need handles cases no list anticipated. Use the requester's terms, not the
-code's, so it still holds if the codebase were deleted.
-
-Acceptance holds only what the Need leaves open: a boundary where a neighbouring
-case must come out differently, a number, or — for judgment work — which real
-cases the requester will judge it on, compared against what. Say where each
-shows: a page, an API field, a stored row, a replay on real data. When the Need
-already says it, omit the section; restating the need as cases adds no clarity
-and reads to the executor as a test suite to write. Business rules and named
-samples stay out: rules belong in the domain document, and work gets fitted to
-any sample it is shown.
+Binding decisions say which existing structure carries the change and what is
+added to it — a table, field, service, permission, compatibility path, or script
+— with what the existing structure cannot carry. A rule about how the business
+works, rather than what this delivery does, belongs in the project's domain
+document or a spec, linked from here.
 
 Split delivery at ownership, contract, independently reversible risk, or useful
-verification boundaries — keeping a producer with its consumer, a schema with its reader, and a
-state transition with its observable API or UI when that is the coherent outcome.
-Record ordering only when changing it changes the result. Give each step the
-lightest check that observes its accepted outcome; this need not be a new test.
-For a bug fix, identify the prior failure when feasible. For behavior-preserving
-refactoring or cleanup, existing checks passing before and after are useful
-regression evidence. Derive checks from the current need, not deleted
-implementation details; retiring logic does not create a requirement to test its
-absence or invert its old assertions. Follow the global rules for test lifecycle
-and TDD.
+verification boundaries — keeping a producer with its consumer, a schema with its
+reader, and a state transition with its observable API or UI when that is the
+coherent outcome. Record ordering only when changing it changes the result.
 
-Request, Need, Acceptance, Scope, Structure, and Binding decisions are the
-agreement.
-The Request quotes the requester and is never rewritten; a later request is
-appended with its date, because the original words are what every later reader
-checks the plan against. When execution finds the agreement wrong, incomplete, or
-overtaken, record the conflict in Status and continue only the work it does not
-touch; the agreement changes once the user confirms, with that date on the
-changed item. Context and Delivery may be corrected against evidence without
-asking. Any change outside Status is committed on its own, its message naming what
-changed and why: git is the plan's history, and a revision folded into a code
-commit leaves none that anyone will find.
-
-Status is the part execution writes freely: where the work stands, what is open,
-what waits on the user. Overwrite it — it is a snapshot for whoever resumes, not a
-log. Run results stay with execution evidence, linked from Status.
+Execution writes only Status, overwriting it. Any other change waits for the
+user, is committed on its own with its reason, and appends to the request rather
+than rewriting it.
 
 After saving, return the path and proposed execution route. Stop for
 confirmation unless the same request already authorized execution.
