@@ -21,7 +21,10 @@ can recover from the code.
   otherwise `docs/plans/` or `docs/specs/` with `YYYY-MM-DD-<slug>.md`.
 - **Need** carries the plan: the requester's problem in their terms — who, in
   what situation, what they can do once it is solved, why, and what stays as it
-  is. Done is read from it; worker acceptance is derived at dispatch.
+  is. Done is read from it; worker acceptance is derived at dispatch. When the
+  request lives in a durable source — an issue, a PRD, a ticket — link it; the
+  Need stays binding, and any deliberate departure from the source is stated in
+  Scope Out or a decision.
 - **Context** keeps verified facts that would defeat the obvious approach, and
   bounded premises with how to validate them.
 - **Scope Out** names tempting work deliberately excluded, including rejected
@@ -32,6 +35,11 @@ can recover from the code.
 - **Delivery** slices at ownership, contract, independently reversible risk, or
   verification boundaries, keeping a producer with its consumer and a schema with
   its reader. Record ordering only when changing it changes the result.
+- **Checkpoints.** When the user wants control, end each slice at a result they
+  can observe without reading code, put the slice that could overturn the rest
+  first, cut finer before costly or irreversible steps, and mark where execution
+  stops for their review. A checkpoint judges the result against the Need and
+  Scope Out, not the slice's own check.
 
 Omit empty sections:
 

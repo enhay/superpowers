@@ -21,8 +21,10 @@ your context small, not to redo reading you have already done.
   scout first and point the rest at its notes.
 - **Acceptance.** A worker starts cold and stops when it believes it is done, so
   state what done means: WHEN a concrete trigger THEN an observable result, and
-  where it shows. For judgment work — rules, scoring, prompts, analyses — samples at hand
-  can be fitted, so name the real cases the requester will judge by and have the
+  where it shows. Point to the Need the slice serves, so the check reads as
+  evidence of it rather than the target. For judgment work — rules, scoring,
+  prompts, analyses — whatever the worker sees can be fitted: give some real cases
+  and their kinds, keep others back for your own verification, and have the
   worker state its approach before editing.
 - **Concurrency.** In one checkout, parallel workers see each other's half-done
   state, so their green checks prove nothing. Across repositories, the risk is
@@ -42,5 +44,7 @@ your context small, not to redo reading you have already done.
    stay off disk.
 3. Parallel workers in one checkout use worktrees; otherwise run them
    sequentially, or let them only edit and verify once after integration.
-4. Accept the assembled result by observing it on the real consumer path, with
+4. A worker never edits the acceptance check, its fixtures, or existing test
+   expectations; a check it believes wrong is reported, not changed.
+5. Accept the assembled result by observing it on the real consumer path, with
    the other side running — never by a worker's report or green check alone.
