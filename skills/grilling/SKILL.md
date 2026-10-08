@@ -18,7 +18,8 @@ before anything durable is written.
 - The user owns the goal and what done looks like, architecture, UX, business and
   data semantics, permissions, irreversible effects, contracts, and ordering that
   changes the result. Settle the rest from the current system: names, files,
-  libraries, decomposition, worker and commit choices.
+  libraries, decomposition, worker and commit choices. Trace each binding
+  decision to something the user said, or ask.
 - Raise a new guard, fallback, compatibility path, or structure only when the
   global rules' scenario-and-condition test holds. Asking implies it was worth
   considering, and it tends to come back as a yes.

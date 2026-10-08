@@ -19,8 +19,9 @@ your context small, not to redo reading you have already done.
 - **Brief.** Point to context — paths, commits, spec sections, a scout's notes —
   instead of restating it. When several workers need the same ground, send one
   scout first and point the rest at its notes.
-- **Acceptance.** WHEN a concrete trigger THEN an observable result, and where it
-  shows. For judgment work — rules, scoring, prompts, analyses — samples at hand
+- **Acceptance.** A worker starts cold and stops when it believes it is done, so
+  state what done means: WHEN a concrete trigger THEN an observable result, and
+  where it shows. For judgment work — rules, scoring, prompts, analyses — samples at hand
   can be fitted, so name the real cases the requester will judge by and have the
   worker state its approach before editing.
 - **Concurrency.** In one checkout, parallel workers see each other's half-done
