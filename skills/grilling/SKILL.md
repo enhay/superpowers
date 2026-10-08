@@ -5,48 +5,33 @@ description: Use before writing a durable plan or spec when the need, load-beari
 
 # Grilling
 
-Reach shared understanding before any durable artifact is written. Do not create
-or edit a plan, spec, decision log, or notes while this skill is active.
+Reach a confirmed, shared understanding of the need and its binding decisions
+before anything durable is written.
 
-## The need
+## Guidance
 
-Take the need from the request or the user. Inspection tells you what constrains
-the need and what it costs, never what the need is: a need discovered by reading
-code — "the system lacks X" — describes the code, not anyone's goal. If the
-request contains independent outcomes, separate them before refining the first.
+- The need comes from the user. Code tells you what constrains the need and what
+  it costs, never what it is: "the system lacks X" describes code, not a goal.
+  Separate independent outcomes and refine one at a time.
+- Look facts up in code, data, and docs instead of asking the user to recall
+  them, in parallel with the questions that do not depend on them.
+- The user owns the goal and what done looks like, architecture, UX, business and
+  data semantics, permissions, irreversible effects, contracts, and ordering that
+  changes the result. Settle the rest from the current system: names, files,
+  libraries, decomposition, worker and commit choices.
+- Raise a new guard, fallback, compatibility path, or structure only when the
+  global rules' scenario-and-condition test holds. Asking implies it was worth
+  considering, and it tends to come back as a yes.
+- Phrase each question as the business situation and what each answer makes
+  happen. One that needs the code or a coined label to be understood is not
+  ready to ask.
 
-Inspect authoritative sources for facts instead of asking the user to rediscover
-them. Trace each decision to an existing user statement, or ask.
+## Constraints
 
-## Ask only binding questions
-
-The user decides the goal and what done looks like, architecture, UX, business
-and data semantics (ownership and migration destination included), permissions,
-irreversible effects, public or cross-team contracts, and ordering that changes
-the result.
-
-Resolve reversible choices from the current system: internal names, files,
-libraries, control flow, local decomposition, worker choice, review choreography,
-and commit grouping. Do not turn those into questions unless coordination or
-reversal cost makes one binding.
-
-Put a new boundary, validation, fallback, compatibility path, or structure to the
-user only once the global rules' trigger-and-consequence test holds for it. An
-unwarranted item put to the user tends to come back as a yes — asking implies it
-was worth considering.
-
-Ask the currently answerable questions in one numbered round, each with a
-recommended answer — starting from what already exists — and its material
-tradeoff. State each as the business situation and what each answer makes happen;
-one that needs the code or a label you coined to be understood is not ready to
-ask. Do not ask a question whose answer
-depends on another still pending; recompute the next round after the user
-responds. Investigate missing environmental facts in parallel with the questions
-that do not depend on them.
-
-## Finish
-
-Summarize the need as the plan will state it, in the user's terms; the verified
-facts, bounded premises, and material unknowns; each
-binding decision and its chosen value; and any unknown that still blocks a
-decision. Ask the user to confirm, then stop.
+1. Create or edit no files.
+2. Ask only binding questions, in one numbered round, each with a recommended
+   answer that starts from what exists and its material tradeoff. Never ask one
+   whose answer depends on another still open; recompute after each reply.
+3. Finish with a summary in the user's terms — the need, verified facts and
+   bounded premises, each binding decision with its value, any unknown that
+   still blocks — then ask for confirmation and stop.

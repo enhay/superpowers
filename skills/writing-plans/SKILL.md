@@ -5,78 +5,61 @@ description: Use only to create or update a durable implementation plan or spec,
 
 # Writing Plans
 
-Write a durable agreement about the intended result, not a transcript or an
-implementation recipe. The artifact must be **decision-complete and
-implementation-open**: exact about the need and costly boundaries, silent about
-reversible local choices the implementer can recover from code. Refine each item
-until no costly branch is left for the implementer to guess, then stop; each fact
-lives in one section.
+A plan or spec is the requirement as understood after discussion: what an
+implementer needs to deliver the right result without guessing, and nothing it
+can recover from the code.
 
-## Preconditions
+## Guidance
 
-Write only after the need, load-bearing facts, and binding decisions are settled
-and confirmed by the user; if any remain open, use `grilling`. Do not encode an
-unresolved branch as a draft or `pending` item.
+- **Depth.** Decision-complete, implementation-open: refine each item until no
+  costly branch is left for the implementer to guess, then stop. Reversible local
+  choices stay out.
+- **Shape.** One coordinated delivery with one observable outcome gets one plan,
+  even across repositories. Add a spec above plans only when independent
+  deliveries share architecture, business semantics, or a public contract, or
+  the user asks; the spec lists its plans and each links back. Use project paths,
+  otherwise `docs/plans/` or `docs/specs/` with `YYYY-MM-DD-<slug>.md`.
+- **Need** carries the plan: the requester's problem in their terms — who, in
+  what situation, what they can do once it is solved, why, and what stays as it
+  is. Done is read from it; worker acceptance is derived at dispatch.
+- **Context** keeps verified facts that would defeat the obvious approach, and
+  bounded premises with how to validate them.
+- **Scope Out** names tempting work deliberately excluded, including rejected
+  alternatives an implementer would plausibly reach for.
+- **Binding decisions** say which existing structure carries the change, what is
+  added to it, and what the existing structure cannot carry. A standing business
+  rule belongs in the domain document or a spec, linked from here.
+- **Delivery** slices at ownership, contract, independently reversible risk, or
+  verification boundaries, keeping a producer with its consumer and a schema with
+  its reader. Record ordering only when changing it changes the result.
 
-The plan defines the intended result and durable constraints; code, schema,
-configuration, and runtime evidence define current state; todo state and the
-plan's Status define progress. A plan records authority — it does not grant
-permission to push, deploy, migrate, or write production data.
-
-## The artifact
-
-One coordinated delivery producing one observable outcome gets one plan, even when
-it crosses repositories. Add a spec above the plans only when independent
-deliveries must share durable architecture, business semantics, or a public
-contract, or the user asks. Use project paths when defined, otherwise
-`docs/plans/YYYY-MM-DD-<slug>.md` and `docs/specs/YYYY-MM-DD-<slug>.md`; a spec
-lists its child plans and each child links back.
-
-Omit empty sections. A plan normally contains:
+Omit empty sections:
 
 ```markdown
 # <Outcome> Implementation Plan
 
 ## Need
-<whose problem, in what situation, what they can do or see once it is solved, why it matters, and what stays as it is>
-
 ## Context
-<verified constraints, and any bounded premise with its validation path>
-
 ## Scope
-- In: <required outcome>
-- Out: <tempting adjacent work deliberately excluded>
-
+- In:
+- Out:
 ## Binding decisions
-- D1: <a durable or costly choice; include source/date when useful>
-
+- D1:
 ## Delivery
 1. <what this slice delivers, end to end> — real dependency
-
 ## Status
-<where the work stands, what is open, what waits on the user; overwritten, not appended>
+<where the work stands and what waits on the user; overwritten, not appended>
 ```
 
-The Need carries the plan: prose the requester would recognise as their own
-problem, in their terms rather than the code's. Stated that way it already says
-what done looks like. Acceptance for a worker is derived from it at dispatch, not
-listed here.
+## Constraints
 
-Write from your understanding of the conversation, not as its record: no quotes,
-agent-directed instructions, superseded positions, or references only the
-conversation resolves. Rewrite changes in place; the commit records why. Never
-reuse or mention a removed decision ID.
-
-Binding decisions say which existing structure carries the change and what is
-added to it — a table, field, service, permission, compatibility path, or script
-— with what the existing structure cannot carry. A rule about how the business
-works, rather than what this delivery does, belongs in the project's domain
-document or a spec, linked from here.
-
-Split delivery at ownership, contract, independently reversible risk, or useful
-verification boundaries — keeping a producer with its consumer, a schema with its
-reader, and a state transition with its observable API or UI when that is the
-coherent outcome. Record ordering only when changing it changes the result.
-
-After saving, return the path and proposed execution route. Stop for
-confirmation unless the same request already authorized execution.
+1. Write only after the user has confirmed the need and binding decisions;
+   otherwise use `grilling`. Never encode an open branch as a draft or `pending`.
+2. Write the current state from your understanding, not a record of the
+   conversation: no quotes, agent-directed instructions, superseded positions,
+   or references only the conversation resolves. Rewrite changes in place; never
+   reuse or mention a removed decision ID.
+3. Each fact lives in one section; no acceptance list.
+4. After saving, return the path and the proposed execution route, then stop
+   unless the same request authorized execution. A plan authorizes no push,
+   deploy, migration, or production write.
