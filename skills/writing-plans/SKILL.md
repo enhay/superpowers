@@ -8,7 +8,9 @@ description: Use only to create or update a durable implementation plan or spec,
 Write a durable agreement about the intended result, not a transcript or an
 implementation recipe. The artifact must be **decision-complete and
 implementation-open**: exact about the need and costly boundaries, silent about
-reversible local choices the implementer can recover from code.
+reversible local choices the implementer can recover from code. Refine each item
+until no costly branch is left for the implementer to guess, then stop; each fact
+lives in one section.
 
 ## Preconditions
 
@@ -60,14 +62,10 @@ problem, in their terms rather than the code's. Stated that way it already says
 what done looks like. Acceptance for a worker is derived from it at dispatch, not
 listed here.
 
-Write from your understanding of the whole conversation, never as its record.
-Do not quote the requester. Keep out instructions addressed to the agent,
-proposals that were not adopted, superseded positions, and references only the
-conversation resolves: review item numbers, removed decision IDs, "last round".
-When a decision changes, rewrite the affected text in place as the current
-state; the commit records why. Never reuse a decision ID, and never mention a
-removed one. Before saving, read it cold: every sentence must be in force and
-resolvable from the repo.
+Write from your understanding of the conversation, not as its record: no quotes,
+agent-directed instructions, superseded positions, or references only the
+conversation resolves. Rewrite changes in place; the commit records why. Never
+reuse or mention a removed decision ID.
 
 Binding decisions say which existing structure carries the change and what is
 added to it — a table, field, service, permission, compatibility path, or script
