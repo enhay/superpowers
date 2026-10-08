@@ -35,8 +35,6 @@ Omit empty sections. A plan normally contains:
 ```markdown
 # <Outcome> Implementation Plan
 
-> Request (YYYY-MM-DD): "<requester's words>"
-
 ## Need
 <whose problem, in what situation, what they can do or see once it is solved, why it matters, and what stays as it is>
 
@@ -61,6 +59,15 @@ The Need carries the plan: prose the requester would recognise as their own
 problem, in their terms rather than the code's. Stated that way it already says
 what done looks like. Acceptance for a worker is derived from it at dispatch, not
 listed here.
+
+Write from your understanding of the whole conversation, never as its record.
+Do not quote the requester. Keep out instructions addressed to the agent,
+proposals that were not adopted, superseded positions, and references only the
+conversation resolves: review item numbers, removed decision IDs, "last round".
+When a decision changes, rewrite the affected text in place as the current
+state; the commit records why. Never reuse a decision ID, and never mention a
+removed one. Before saving, read it cold: every sentence must be in force and
+resolvable from the repo.
 
 Binding decisions say which existing structure carries the change and what is
 added to it — a table, field, service, permission, compatibility path, or script
