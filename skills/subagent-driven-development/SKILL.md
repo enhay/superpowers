@@ -19,6 +19,16 @@ your context small, not to redo reading you have already done.
 - **Brief.** Point to context — paths, commits, spec sections, a scout's notes —
   instead of restating it. When several workers need the same ground, send one
   scout first and point the rest at its notes.
+- **Tier.** Pick each worker's tier by what the slice spends, not by its size.
+  Judgment-dense work — a contract, a permission rule, a cause not yet found,
+  anything the acceptance check cannot fully observe — stays on the current tier.
+  Read- or write-heavy work with a check that fully observes it — a scout sweep,
+  a mechanical edit across files, running and summarizing tests — may drop to a
+  lighter tier. Go above the current tier only after it has failed the same
+  slice. Lower effort on the same model before changing model: a worker on
+  another model reuses none of your cache, so a small slice rarely pays for the
+  switch. A model the user names wins; the runtime's global rules map tiers to
+  its models, and without that mapping the worker inherits the current model.
 - **Acceptance.** A worker starts cold and stops when it believes it is done, so
   state what done means: WHEN a concrete trigger THEN an observable result, and
   where it shows. Point to the Need the slice serves, so the check reads as
