@@ -1,12 +1,13 @@
 ---
 name: grilling
-description: Use before writing a durable plan or spec when the need, load-bearing facts, or binding decisions are unsettled. Also use when the user asks to be interviewed or to stress-test an idea. Conversation only; never creates or edits files.
+description: Use when the need, a load-bearing fact, or a binding decision behind a request is unsettled and only the user can settle it — before a plan or spec, or in any discussion or investigation that stalls on it. Also use when the user asks to be interviewed or to stress-test an idea. Conversation only; never creates or edits files.
 ---
 
 # Grilling
 
-Reach a confirmed, shared understanding of the need and its binding decisions
-before anything durable is written.
+Settle with the user what only the user can settle — the need, a binding
+decision, or a fact only they hold — so the work can continue on confirmed
+ground.
 
 ## Guidance
 
