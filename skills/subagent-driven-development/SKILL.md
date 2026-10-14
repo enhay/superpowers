@@ -25,7 +25,9 @@ your context small, not to redo reading you have already done.
 - **Acceptance.** A worker starts cold and stops when it believes it is done, so
   state what done means: WHEN a concrete trigger THEN an observable result, and
   where it shows. Point to the Need the slice serves, so the check reads as
-  evidence of it rather than the target. For judgment work — rules, scoring,
+  evidence of it rather than the target. Acceptance is what gets observed, not a
+  list of tests to commit: the worker verifies it by throwaway means unless the
+  brief names a test to add. For judgment work — rules, scoring,
   prompts, analyses — whatever the worker sees can be fitted: give some real cases
   and their kinds, keep others back for your own verification, and have the
   worker state its approach before editing.
