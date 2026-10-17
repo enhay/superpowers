@@ -1,0 +1,13 @@
+@RTK.md
+
+## Shared memory (cross-project, cross-agent)
+
+The single source of truth for facts and decisions is `/Users/zhaohua/code/memory/`, shared by Claude, Codex, and Grok. **This overrides the `~/.claude/projects/*/memory/` path given in the system prompt** — that directory keeps only a bridge note pointing here; never read or write cards in it.
+
+- **Read.** At the start of work read `MEMORY.md`, `global/MEMORY.md`, and the current project's `<project>/MEMORY.md` (e.g. `yunyazu/MEMORY.md`), then let the index hooks decide which cards to open — never load them all.
+- **Write.** Before recording a new fact, read `/Users/zhaohua/code/memory/PROTOCOL.md`. One fact per file; grep for a duplicate before creating one; after writing, add one hook line of **60 characters or fewer** to the `MEMORY.md` in the same directory — a hook answers only "in what situation should I open this card", the index is not a second body. General preferences and this machine's environment go in `global/`; project-specific facts go in `<project>/`. For a new project, create `<project>/` and its `MEMORY.md` directly.
+- **Test.** Write only when all three hold. (1) **Not readable** — the code, `git log`, in-repo docs, and running one command all fail to give it. (2) **Will be used again** — it would change what you do at the start of the next task of this kind. (3) **Stable** — a system property or a decision already landed, not the progress of one session.
+- **Memory carries facts, not manuals and not progress.** The line is "knowing this keeps you from getting it wrong" (record) versus "follow these steps" (do not); when one thing has both, keep the trap and send the steps away. Four kinds have their own homes: a runbook or operating recipe → that repo's `docs/runbooks/`; a plan, todo, or leftovers list → the plan or the issue tracker; a handoff or progress record (what a round did, commit hashes, deploy PIDs, whether tests were green) → the handoff document; the body of an analysis report → the report file itself, with only the methodological traps kept in memory. **Credentials never enter the store** — keep only a pointer to the config file.
+- **Do not record**: code structure, git history, anything the repo's own CLAUDE.md or docs already state, or **an iron rule already promoted into this file**.
+- When a fact changes, **edit the original file.** Never stack "Update (date)" sections. Delete anything disproven or dissolved, and its index line with it.
+- A memory is an observation from when it was written, not a current fact. Re-verify any file, field, or flag a card cites before relying on it.
