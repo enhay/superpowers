@@ -12,6 +12,7 @@ rest were removed, and how the symlinks reach each runtime.
   list line in all three global instruction files (`~/CLAUDE.md`,
   `~/.codex/AGENTS.md`, `~/.grok/AGENTS.md`). Grok needs no symlink — its
   `~/.grok/config.toml` reads `~/.agents/skills` directly.
-- The global instruction files live in `rules/`; the paths under `~` are symlinks
-  created by `rules/install.sh`. This repo is public: no credentials or hosts there.
+- `rules/` is a snapshot of the global instruction files for other machines;
+  the originals under `~` stay authoritative, and `rules/install.sh` copies the
+  snapshot into place. This repo is public: no credentials or hosts there.
 - Skill text stays harness-neutral — the same files are read by more than one runtime.
