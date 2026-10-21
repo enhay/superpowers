@@ -53,3 +53,5 @@ your context small, not to redo reading you have already done.
    expectations; a check it believes wrong is reported, not changed.
 5. Accept the assembled result by observing it on the real consumer path, with
    the other side running — never by a worker's report or green check alone.
+   When a plan governs the work, accept against it as `writing-plans` reviews
+   an implementation.

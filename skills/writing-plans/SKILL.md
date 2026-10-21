@@ -1,6 +1,6 @@
 ---
 name: writing-plans
-description: Use only to create or update a durable implementation plan or spec, or to perform a formal implementation-readiness review of one. Do not use for planning-policy questions, narrow artifact inspection, direct answers, or routine local changes.
+description: Use only to create or update a durable implementation plan or spec, to review one for implementation readiness, or to review an implementation against its plan or spec. Do not use for planning-policy questions, narrow artifact inspection, direct answers, or routine local changes.
 ---
 
 # Writing Plans
@@ -38,8 +38,8 @@ can recover from the code.
 - **Checkpoints.** When the user wants control, end each slice at a result they
   can observe without reading code, put the slice that could overturn the rest
   first, cut finer before costly or irreversible steps, and mark where execution
-  stops for their review. A checkpoint judges the result against the Need and
-  Scope Out, not the slice's own check.
+  stops for their review. A checkpoint judges the result against the plan, as
+  in Reviewing an implementation, not the slice's own check.
 
 Omit empty sections:
 
@@ -58,6 +58,48 @@ Omit empty sections:
 ## Status
 <where the work stands and what waits on the user; overwritten, not appended>
 ```
+
+## Reviewing a plan
+
+A plan cannot be run, and every slice inherits its mistakes. Read it yourself
+and look only for what is costly to reverse once built and invisible in a
+later diff:
+
+- **Premises.** Which facts in Context and the decisions were checked against
+  code or data, and which are inference? A false load-bearing premise sinks the
+  whole plan.
+- **Need.** Name the observation that decides done, and what failure would look
+  like. If you cannot, the Need is too vague to accept against.
+- **Implicit decisions.** Find the business choices the plan made without the
+  user: a threshold, a default, a calibration, a permission outcome. Each one
+  goes back to `grilling`, not into the plan.
+- **Coverage.** Every costly branch — contract shape, data semantics, existing
+  data, permissions, irreversible steps — is decided; a missing one is a
+  finding. A decision that only fixes a reversible local choice is too.
+- **Delivery.** Hidden ordering, two slices in one module, or an irreversible
+  step with no checkpoint before it.
+- **Proportion.** A plan too heavy or too light for its problem is a finding.
+
+Leave wording, naming, library choice, and edge-case enumeration to execution.
+
+## Reviewing an implementation
+
+Pin the diff range the plan covers and read the plan first. Ask three
+questions, and quote the plan item — Need, Scope Out, or the decision ID — in
+each finding:
+
+1. **Missing or partial.** What the Need promised that is not delivered.
+   Observe it on the real consumer path; reading the diff does not show it.
+2. **Beyond the plan.** Behavior nothing in the plan asked for, or anything
+   Scope Out excluded.
+3. **Against a decision.** A binding decision carried by a different structure
+   than it names, or with something it did not add. Read the code here; a
+   passing check does not show it.
+
+When code departs from the plan because the plan was wrong, the finding is a
+plan change for the user, never a silent acceptance or a fix that makes the
+code match a wrong plan. Report plan findings apart from bug and quality
+findings, so one does not mask the other.
 
 ## Constraints
 
