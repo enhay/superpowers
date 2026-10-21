@@ -1,6 +1,6 @@
 ---
 name: subagent-driven-development
-description: Use when delegating implementation to subagents - executing a plan whose slices can be owned separately, or when the user asks for subagent execution.
+description: Use when delegating implementation or review to subagents - executing a plan whose slices can be owned separately, dispatching a reviewer, or when the user asks for subagent execution.
 ---
 
 # Subagent-Driven Development
@@ -39,7 +39,11 @@ your context small, not to redo reading you have already done.
   diff. Read code only when code is that layer — permissions, a public contract's
   shape, other callers of a shared function — or when nothing runnable observes
   it. A code reviewer earns its cold read only for risk no runnable check can
-  see, spawned once over the assembled result.
+  see, spawned once over the assembled result. Cold means it never inherits
+  your conversation — a forked history carries your reasoning and it confirms
+  it. Point it at the diff range, the plan if one governs, and the standards the
+  project instructions name; it reviews as `writing-plans` states and edits
+  nothing.
 
 ## Constraints
 

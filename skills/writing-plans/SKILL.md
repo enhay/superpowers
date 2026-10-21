@@ -1,6 +1,6 @@
 ---
 name: writing-plans
-description: Use only to create or update a durable implementation plan or spec, to review one for implementation readiness, or to review an implementation against its plan or spec. Do not use for planning-policy questions, narrow artifact inspection, direct answers, or routine local changes.
+description: Use only to create or update a durable implementation plan or spec, to review one for implementation readiness, or to review an implementation against its plan, spec, or documented architecture constraints. Do not use for planning-policy questions, narrow artifact inspection, direct answers, or routine local changes.
 ---
 
 # Writing Plans
@@ -84,9 +84,10 @@ Leave wording, naming, library choice, and edge-case enumeration to execution.
 
 ## Reviewing an implementation
 
-Pin the diff range the plan covers and read the plan first. Ask three
-questions, and quote the plan item — Need, Scope Out, or the decision ID — in
-each finding:
+Pin the diff range, then read the plan if one governs and the architecture and
+coding standards the project instructions name. Quote the source in each
+finding — the plan's Need, Scope Out, or decision ID, or the standard's rule.
+The first three questions need a plan; the fourth always applies:
 
 1. **Missing or partial.** What the Need promised that is not delivered.
    Observe it on the real consumer path; reading the diff does not show it.
@@ -95,11 +96,15 @@ each finding:
 3. **Against a decision.** A binding decision carried by a different structure
    than it names, or with something it did not add. Read the code here; a
    passing check does not show it.
+4. **Against a standard.** A documented constraint the diff breaks: ownership,
+   dependency direction, extension point, a review checklist the document
+   carries. The project's own rule wins over general taste; a recorded
+   deviation is not a finding.
 
 When code departs from the plan because the plan was wrong, the finding is a
 plan change for the user, never a silent acceptance or a fix that makes the
-code match a wrong plan. Report plan findings apart from bug and quality
-findings, so one does not mask the other.
+code match a wrong plan; the same holds for a standard. Report plan, standard,
+and bug findings as separate groups, so one does not mask another.
 
 ## Constraints
 
