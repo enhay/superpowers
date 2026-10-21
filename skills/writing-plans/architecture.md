@@ -3,8 +3,7 @@
 Language- and framework-agnostic constraints for design, implementation, and
 review. A project's own architecture document adds its style choice, its
 concrete signals, and where current code deviates; where the two differ, the
-project wins. Backend logging is in [backend.md](backend.md), frontend rules in
-[frontend.md](frontend.md).
+project wins. Frontend rules are in [frontend.md](frontend.md).
 
 ## Goals
 
@@ -128,3 +127,4 @@ Each signal needs the author's justification against its principle:
 | A component taking a second mode flag, or borrowing another place's configuration by index | P6 |
 | Display text used to identify a state or an event | P1 |
 | A layer the deletion test shows only forwards | P6 |
+| An error turned into a generic failure without logging the original error and the request's identifier | — |

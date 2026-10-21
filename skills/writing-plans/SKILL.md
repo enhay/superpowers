@@ -100,9 +100,9 @@ The first three questions need a plan; the fourth always applies:
    than it names, or with something it did not add. Read the code here; a
    passing check does not show it.
 4. **Against a standard.** A constraint the diff breaks, from
-   [architecture.md](architecture.md) and the backend or frontend file it
-   links for the side the diff touches — their review signals first — and the
-   project's own documents. The project's rule wins over both the general one
+   [architecture.md](architecture.md), plus the frontend file it links when the
+   diff touches the frontend — their review signals first — and the project's
+   own documents. The project's rule wins over both the general one
    and taste; a recorded deviation is not a finding.
 
 When code departs from the plan because the plan was wrong, the finding is a
