@@ -3,18 +3,19 @@
 Framework-agnostic additions to [architecture.md](architecture.md). Library
 names and folder layout come from each repository.
 
-## Use the established stack
+## Build on the framework's practice
 
-1. A new frontend or page uses the stack the team already standardizes on: the
-   component library and its higher layer — layout shell, page container, query
-   table, forms — plus the router, request layer, and theme, taken from the
-   reference project the plan names. Hand-building any of these while the stack
-   provides it is a defect, even when only a lower-level library is installed:
-   a layout shell, routing or URL state, table query and pagination, form state
-   and validation, a login form. "Minimal" limits the scope, never the stack.
-2. For a new project, the plan names the stack and its reference project as a
-   binding decision, so installing those packages is approved with the plan
-   rather than avoided as a new dependency.
+1. Follow the framework's recommended practice and companion libraries: its
+   router, the higher layer of its component library — layout shell, page
+   container, query table, forms — and its data-fetching and request approach.
+   Where the framework leaves a choice, follow the team's existing project on the
+   same framework. Hand-building any of these is a defect, even when only a
+   lower-level library is installed: a layout shell, routing or URL state, table
+   query and pagination, form state and validation, a login form. "Minimal"
+   limits the scope, never the stack.
+2. For a new project, the plan names the framework and these companion libraries
+   as a binding decision, so installing them is approved with the plan rather
+   than avoided as a new dependency.
 
 ## Structure
 
@@ -35,7 +36,7 @@ names and folder layout come from each repository.
 
 | Signal | Rule |
 |---|---|
-| A hand-built router, layout, query table, or form state beside a stack that provides it | 1 |
+| A hand-built router, layout, query table, or form state where the framework's practice provides one | 1 |
 | One page file holding the state and requests of several features | 3, 8 |
 | Branching on raw attributes to decide the next step or eligibility | 6 |
 | Hand-written API types beside a contract | 7 |

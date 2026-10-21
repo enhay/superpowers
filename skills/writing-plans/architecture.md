@@ -3,8 +3,8 @@
 Language- and framework-agnostic constraints for design, implementation, and
 review. A project's own architecture document adds its style choice, its
 concrete signals, and where current code deviates; where the two differ, the
-project wins. Backend and frontend specifics are in [backend.md](backend.md)
-and [frontend.md](frontend.md).
+project wins. Backend logging is in [backend.md](backend.md), frontend rules in
+[frontend.md](frontend.md).
 
 ## Goals
 
