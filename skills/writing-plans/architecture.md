@@ -3,7 +3,8 @@
 Language- and framework-agnostic constraints for design, implementation, and
 review. A project's own architecture document adds its style choice, its
 concrete signals, and where current code deviates; where the two differ, the
-project wins.
+project wins. Backend and frontend specifics are in [backend.md](backend.md)
+and [frontend.md](frontend.md).
 
 ## Goals
 
@@ -42,8 +43,9 @@ Basis: dependency inversion; information hiding.
 Variants plug in through points the core declares: a configuration object, a
 strategy interface, a registered handler. When none fits, changing the core to
 add or widen one is part of the work; never copy the core flow or add a type
-check to it. Build a point only for a difference that exists: one
-implementation is a hypothetical seam, two make it real.
+check to it. Build a point only for a difference that exists: an extension
+point with one implementation is guesswork, so build it when the second one
+arrives.
 
 Before designing, write a difference table against the closest existing flow,
 marking each step same, different parameters, different rule, or new step.
