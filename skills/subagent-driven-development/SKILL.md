@@ -41,9 +41,9 @@ your context small, not to redo reading you have already done.
   it. A code reviewer earns its cold read only for risk no runnable check can
   see, spawned once over the assembled result. Cold means it never inherits
   your conversation — a forked history carries your reasoning and it confirms
-  it. Point it at the diff range, the plan if one governs, and the standards the
-  project instructions name; it reviews as `writing-plans` states and edits
-  nothing.
+  it. Point it at the diff range, the plan if one governs, and the standards —
+  `writing-plans`' `architecture.md` and those the project instructions name;
+  it reviews as `writing-plans` states and edits nothing.
 
 ## Constraints
 

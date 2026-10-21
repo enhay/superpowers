@@ -31,7 +31,9 @@ can recover from the code.
   alternatives an implementer would plausibly reach for.
 - **Binding decisions** say which existing structure carries the change, what is
   added to it, and what the existing structure cannot carry. A standing business
-  rule belongs in the domain document or a spec, linked from here.
+  rule belongs in the domain document or a spec, linked from here. An
+  architecture-level change, as [architecture.md](architecture.md) defines it,
+  answers its design questions here.
 - **Delivery** slices at ownership, contract, independently reversible risk, or
   verification boundaries, keeping a producer with its consumer and a schema with
   its reader. Record ordering only when changing it changes the result.
@@ -75,7 +77,8 @@ later diff:
   goes back to `grilling`, not into the plan.
 - **Coverage.** Every costly branch — contract shape, data semantics, existing
   data, permissions, irreversible steps — is decided; a missing one is a
-  finding. A decision that only fixes a reversible local choice is too.
+  finding. A decision that only fixes a reversible local choice is too, and so
+  is an architecture-level change without its design questions answered.
 - **Delivery.** Hidden ordering, two slices in one module, or an irreversible
   step with no checkpoint before it.
 - **Proportion.** A plan too heavy or too light for its problem is a finding.
@@ -96,10 +99,10 @@ The first three questions need a plan; the fourth always applies:
 3. **Against a decision.** A binding decision carried by a different structure
    than it names, or with something it did not add. Read the code here; a
    passing check does not show it.
-4. **Against a standard.** A documented constraint the diff breaks: ownership,
-   dependency direction, extension point, a review checklist the document
-   carries. The project's own rule wins over general taste; a recorded
-   deviation is not a finding.
+4. **Against a standard.** A constraint the diff breaks, from
+   [architecture.md](architecture.md) — its review signals first — and the
+   project's own documents. The project's rule wins over both the general one
+   and taste; a recorded deviation is not a finding.
 
 When code departs from the plan because the plan was wrong, the finding is a
 plan change for the user, never a silent acceptance or a fix that makes the
